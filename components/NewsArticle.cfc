@@ -78,7 +78,7 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public any function init () {
+  public component function init () {
     if (1 == ArrayLen(ARGUMENTS)) {
       // WriteDump(ARGUMENTS[1]);
       if (IsStruct(ARGUMENTS[1])) {
@@ -106,7 +106,7 @@ component accessors=true output=false persistent=false {
     return new HTMLFragment(getContent()).importableHTML();
   }
 
-  // public any function cleanContentDOM () {
+  // public component function cleanContentDOM () {
   //   return new FormattedTextBlock(getContent()).cleanDOM();
   // }
 
@@ -118,22 +118,22 @@ component accessors=true output=false persistent=false {
   //   return new FormattedTextBlock(getContent()).cleanLinks();
   // }
 
-  // public any function contentDOM () {
+  // public component function contentDOM () {
   //   return new FormattedTextBlock(getContent()).getDOM();
   // }
 
-  public any function images () {
+  public component function images () {
     return contentHTMLFragment.images();
   }
 
-  public any function links () {
+  public component function links () {
     return contentHTMLFragment.links();
   }
 
-  public void function setContent (required string newContent) {
+  public void function setContent (required string content) {
     // writeDump(newContent);
-    content = newContent;
-    contentHTMLFragment = new HTMLFragment(newContent);
+    VARIABLES.content = ARGUMENTS.content;
+    VARIABLES.contentHTMLFragment = new HTMLFragment(ARGUMENTS.content);
   }
 
   public array function taxonomyArray () {
@@ -248,12 +248,22 @@ component accessors=true output=false persistent=false {
 
   // Tarteting the WP Import All plugin
   public struct function toStructForXMLExport () {
-    return {
-      content  = new FormattedTextBlock(getContent()).toStructForXMLExport(),
+    var images = images().importable().toArray();
+    // WriteDump(images);
+    images = ArrayMap(images, function(image) {
+      // return image;
+      return image.getHTML();
+    });
+    var sfxe = {
+      content  = encodeForXML(getContent()),
       summary  = encodeForXML(getSummary()),
       title    = encodeForXML(getTitle()),
       taxonomy = encodeForXML(taxonomyList())
     };
+    if (0 < ArrayLen(images)) {
+      sfxe['images'] = images;
+    }
+    return sfxe;
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

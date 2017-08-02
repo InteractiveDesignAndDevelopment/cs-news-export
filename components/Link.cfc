@@ -32,6 +32,26 @@ component accessors=true output=false persistent=false {
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+   █████   ██████  ██████ ███████ ███████ ███████  ██████  ██████  ███████
+  ██   ██ ██      ██      ██      ██      ██      ██    ██ ██   ██ ██
+  ███████ ██      ██      █████   ███████ ███████ ██    ██ ██████  ███████
+  ██   ██ ██      ██      ██           ██      ██ ██    ██ ██   ██      ██
+  ██   ██  ██████  ██████ ███████ ███████ ███████  ██████  ██   ██ ███████
+
+  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+  public void function setDOM (required any dom) {
+    VARIABLES.dom = ARGUMENTS.dom;
+    VARIABLES.html = ARGUMENTS.dom.body().html();
+  }
+
+  public void function setHTML (required string html) {
+    VARIABLES.html = ARGUMENTS.html;
+    VARIABLES.dom = jSoup.parseBodyFragment(ARGUMENTS.html);
+  }
+
+  /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
   ██████  ██    ██ ██████  ██      ██  ██████
   ██   ██ ██    ██ ██   ██ ██      ██ ██
   ██████  ██    ██ ██████  ██      ██ ██
@@ -40,19 +60,22 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public any function importable () {
+  public component function importable () {
     setDOM(whiteListAttributes(dom, 'a', 'href'));
+    ArrayEach(dom.select('a'), function(a) {
+      var url = '';
+      if (a.hasAttr('href')) {
+        url = a.attr('href');
+        if (0 < Len(url)) {
+          url = new URL(url).toAbsolute();
+        }
+        // WriteDump(var = url, label = 'Link URL');
+        // if (0 < Len(url)) {
+        //   a.attr('href');
+        // }
+      }
+    });
     return this;
-  }
-
-  public void function setDOM (required any newDOM) {
-    dom = newDOM;
-    html = newDOM.body().html();
-  }
-
-  public void function setHTML (required string newHTML) {
-    html = newHTML;
-    dom = jSoup.parseBodyFragment(newHTML);
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

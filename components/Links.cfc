@@ -41,7 +41,7 @@ component accessors=true output=false persistent=false {
     return ArrayLen(links);
   }
 
-  public any function importable () {
+  public component function importable () {
     links = ArrayMap(links, function(link) {
       // writeDump(link);
       return link.importable();

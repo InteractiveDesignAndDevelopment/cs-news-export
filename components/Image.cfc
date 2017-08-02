@@ -23,11 +23,34 @@ component accessors=true output=false persistent=false {
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
   public function init () {
+    // WriteDump(ARGUMENTS);
+
     if (1 == ArrayLen(ARGUMENTS) && IsSimpleValue(ARGUMENTS[1])) {
       setHTML(ARGUMENTS[1]);
     }
 
     return this;
+  }
+
+  /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+   █████   ██████  ██████ ███████ ███████ ███████  ██████  ██████  ███████
+  ██   ██ ██      ██      ██      ██      ██      ██    ██ ██   ██ ██
+  ███████ ██      ██      █████   ███████ ███████ ██    ██ ██████  ███████
+  ██   ██ ██      ██      ██           ██      ██ ██    ██ ██   ██      ██
+  ██   ██  ██████  ██████ ███████ ███████ ███████  ██████  ██   ██ ███████
+
+  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+  public void function setDOM (required any dom) {
+    VARIABLES.dom = ARGUMENTS.dom;
+    VARIABLES.html = VARIABLES.dom.body().html();
+  }
+
+  public void function setHTML (required string html) {
+    // writeDump(ARGUMENTS.html);
+    VARIABLES.html = ARGUMENTS.html;
+    VARIABLES.dom =  jSoup.parseBodyFragment(ARGUMENTS.html);
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -40,20 +63,41 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public any function importable () {
-    setDOM(whiteListAttributes(dom, 'img', 'src'));
+  public component function importable () {
+    // WriteDump(VARIABLES);
+    var dom = VARIABLES.dom;
+    whiteListAttributes('img', 'src');
+    ArrayEach(dom.select('img'), function(image) {
+      var url = image.attr('src');
+      url = new URL(url).toAbsolute();
+      // WriteDump(url);
+      image.attr('src', url);
+    });
+    setDOM(dom);
+    VARIABLES.html = encodeForXML(VARIABLES.html);
     return this;
   }
 
-  public void function setDOM (required any newDOM) {
-    dom = newDOM;
-    html = newDOM.body().html();
+  public component function whiteListAttributes (required string tagName,
+      required string whitelist) {
+    var dom = VARIABLES.dom;
+    var elements = dom.select(tagName);
+    ArrayEach(elements, function(element) {
+      ArrayEach(element.attributes().asList(), function(attr) {
+        if (0 == ListFind(whitelist, attr.getKey())) {
+          element.removeAttr(attr.getKey());
+        }
+      });
+    });
+    setDOM(dom);
+    return this;
   }
 
-  public void function setHTML (newHTML) {
-    // writeDump(newHTML);
-    html = newHTML;
-    dom =  jSoup.parseBodyFragment(newHTML);
+  public struct function toStruct () {
+    return {
+      html = getHTML(),
+      dom = getDOM()
+    };
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -65,19 +109,5 @@ component accessors=true output=false persistent=false {
   ██      ██   ██ ██   ████   ██   ██    ██    ███████
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
-
-  private any function whiteListAttributes(required any tmpDOM,
-      required string tagName,
-      required string whitelist) {
-    var elements = tmpDOM.select(tagName);
-    ArrayEach(elements, function(element) {
-      ArrayEach(element.attributes().asList(), function(attr) {
-        if (0 == ListFind(whitelist, attr.getKey())) {
-          element.removeAttr(attr.getKey());
-        }
-      });
-    });
-    return tmpDOM;
-  }
 
 }

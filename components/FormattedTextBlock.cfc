@@ -39,7 +39,7 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public any function cleanDOM () {
+  public component function cleanDOM () {
     return cleanupDOM(getDom());
   }
 
@@ -54,7 +54,7 @@ component accessors=true output=false persistent=false {
     return tmpLinks;
   }
 
-  public any function getDom () {
+  public object function getDom () {
     return dom;
   }
 

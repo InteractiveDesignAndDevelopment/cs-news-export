@@ -41,7 +41,7 @@ component accessors=true output=false persistent=false {
     return ArrayLen(images);
   }
 
-  public any function importable () {
+  public component function importable () {
     images = ArrayMap(images, function(image) {
       // writeDump(image);
       return image.importable();
@@ -64,11 +64,12 @@ component accessors=true output=false persistent=false {
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
   private array function imagesFromHTML (required string html) {
+    // WriteDump(ARGUMENTS.html);
     var dom = jSoup.parseBodyFragment(ARGUMENTS.html);
     var domImages = dom.select('img');
     // writeDump(domImages);
     domImages = ArrayMap(domImages, function(image) {
-      return new Image(image.outerHtml());
+      return new Image(image.toString());
     });
     return domImages;
   }

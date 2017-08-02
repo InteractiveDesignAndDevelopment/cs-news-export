@@ -40,7 +40,7 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public any function getDom () {
+  public object function getDom () {
     return dom;
   }
 
@@ -51,7 +51,7 @@ component accessors=true output=false persistent=false {
   //   return tmpDOM.body().html();
   // }
 
-  public any function images () {
+  public component function images () {
     // var images = dom.select('img');
     // return images;
     // writedump(getHTML());
@@ -59,6 +59,7 @@ component accessors=true output=false persistent=false {
     return new Images(getHTML());
   }
 
+  // org.jsoup.nodes.Document
   public any function importableDOM() {
     var tmpDOM = dom;
     // General cleanup
@@ -70,6 +71,7 @@ component accessors=true output=false persistent=false {
     tmpDOM = removeNoTextLinks(tmpDOM);
     tmpDOM = whiteListAttributes(tmpDOM, 'a', 'href');
     // tmpDOM = makeURLsAbsoluteInDOM(tmpDOM);
+    // WriteDump(getMetadata(tmpDom).getName());
     return tmpDom;
   }
 
@@ -85,7 +87,7 @@ component accessors=true output=false persistent=false {
   //   return links().importable();
   // }
 
-  public any function links () {
+  public component function links () {
     // var links = dom.select('a');
     // WriteDump(links);
     // return links;

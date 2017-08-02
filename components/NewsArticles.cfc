@@ -21,7 +21,7 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public any function init () {
+  public component function init () {
     if (1 == ArrayLen(ARGUMENTS)) {
       if (IsNumeric(ARGUMENTS[1])) {
         findByPageID(ARGUMENTS[1]);
@@ -41,19 +41,26 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public any function all () {
+  public component function all () {
     var ceData = application.adf.ceData.getCEData('News Article');
     ceData = ArraySlice(ceData, 1, 10);
     articles = ceDataToArticlesArray(ceData);
     return this;
   }
 
-  public any function findByPageID (required numeric pageID) {
+  public component function findByPageID (required numeric pageID) {
     var ceData = application.adf.ceData.getCEData('News Article');
     ceData = ArrayFilter(ceData, function (ceDatum) {
       return pageID == ceDatum.pageID;
     });
     articles = ceDataToArticlesArray(ceData);
+    return this;
+  }
+
+  public component function importable () {
+    articles = ArrayMap(articles, function(article) {
+      return article.toStructForXMLExport();
+    });
     return this;
   }
 
@@ -70,16 +77,8 @@ component accessors=true output=false persistent=false {
     return articles;
   }
 
-  public array function toArrayForXMLExport () {
-    var tempArticles = articles;
-    tempArticles = ArrayMap(tempArticles, function(article) {
-      return article.toStructForXMLExport();
-    });
-    return tempArticles;
-  }
-
   public string function toXML () {
-    return _.toXml(toArrayForXMLExport());
+    return _.toXml(importable().toArray());
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

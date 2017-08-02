@@ -1,5 +1,5 @@
 /**
- * URLConverter.cfc
+ * URL.cfc
  *
  * @author Todd Sayre
  * @date 2017-07-07
@@ -8,6 +8,7 @@ component accessors=true output=false persistent=false {
 
   property name='url'       type='string';
 
+  // From the parseUrl function
   property name='authority' type='string';
   property name='directory' type='string';
   property name='domain'    type='string';
@@ -31,7 +32,7 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public any function init () {
+  public component function init () {
     if (1 == ArrayLen(ARGUMENTS)) {
       setURL(ARGUMENTS[1]);
     }
@@ -49,14 +50,117 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public void function setURL (required string url) {
-    url = ARGUMENTS.url;
-    setURLParts(ARGUMENTS.url);
+  public string function getURL() {
+    var url = '';
+    // http://
+    if (0 < Len(VARIABLES.scheme)) {
+      url &= '#VARIABLES.scheme#://';
+    }
+    // usr
+    if (0 < Len(VARIABLES.username)) {
+      url &= VARIABLES.username;
+    }
+    // :pwd
+    if (0 < Len(VARIABLES.password)) {
+      url &= ':#VARIABLES.password#';
+    }
+    // @
+    if (0 < Len(VARIABLES.username) || 0 < Len(VARIABLES.password)) {
+      url &= '@';
+    }
+    // www.foo.com
+    if (0 < Len(VARIABLES.domain)) {
+      url &= VARIABLES.domain;
+    }
+    // :80
+    if (0 < Len(VARIABLES.port)) {
+      url &= ':#VARIABLES.port#';
+    }
+    // /bar/sub/file.gif
+    if (0 < Len(VARIABLES.path)) {
+      url &= VARIABLES.path;
+    }
+    // ;p=5
+    // TODO: params
+    // ?q1=item1&q1=item2&q2=item3
+    // TODO: params
+    // ##nameAnchor
+    if (0 < Len(VARIABLES.fragment)) {
+      url &= '###VARIABLES.fragment#';
+    }
+    return url;
   }
 
-  public string function getURL () {
-    // WriteDump(toStruct());
-    return toS();
+  public void function setURL (required string url) {
+    var urlParts = parseUrl(ARGUMENTS.url);
+    // WriteDump(var = urlParts, label = 'New URL Parts');
+
+    VARIABLES.url = ARGUMENTS.url;
+
+    setScheme(urlParts.scheme);
+    setAuthority(urlParts.authority);
+    setPath(urlParts.path);
+    setDirectory(urlParts.directory);
+    setFile(urlParts.file);
+    setQuery(urlParts.query);
+    setFragment(urlParts.fragment);
+    setDomain(urlParts.domain);
+    setPort(urlParts.port);
+    setUsername(urlParts.username);
+    setPassword(urlParts.password);
+    setParams(urlParts.params);
+  }
+
+  public void function setScheme(required string scheme) {
+    VARIABLES.scheme = ARGUMENTS.scheme;
+  }
+
+  public void function setAuthority(required string authority) {
+    VARIABLES.authority = ARGUMENTS.authority;
+  }
+
+  public void function setPath(required string path) {
+    VARIABLES.path = ARGUMENTS.path;
+    VARIABLES.directory = GetDirectoryFromPath(ARGUMENTS.path);
+    VARIABLES.file = GetFileFromPath(ARGUMENTS.path);
+  }
+
+  public void function setDirectory(required string directory) {
+    VARIABLES.directory = ARGUMENTS.directory;
+    VARIABLES.path = '#ARGUMENTS.directory##getFile()#';
+  }
+
+  public void function setFile(required string file) {
+    VARIABLES.file = ARGUMENTS.file;
+    VARIABLES.path = '#getDirectory()##ARGUMENTS.file#';
+  }
+
+  public void function setQuery(required string queryString) {
+    VARIABLES.query = ARGUMENTS.queryString;
+  }
+
+  public void function setFragment(required string fragment) {
+    VARIABLES.fragment = ARGUMENTS.fragment;
+  }
+
+  public void function setDomain(required string domain) {
+    VARIABLES.domain = ARGUMENTS.domain;
+  }
+
+  public void function setPort(required string port) {
+    VARIABLES.port = ARGUMENTS.port;
+  }
+
+  public void function setUsername(required string username) {
+    VARIABLES.username = ARGUMENTS.username;
+  }
+
+  public void function setPassword(required string password) {
+    VARIABLES.password = ARGUMENTS.password;
+  }
+
+  public void function setParams(required struct params) {
+    VARIABLES.params = ARGUMENTS.params;
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -69,32 +173,83 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public string function toAbsoluteURL () {
-    if (isRelativeUrl()) {
-
+  private string function directoryMinusDomain () {
+    var matches = REMatchNoCase('/(?:com|mu|tv)-(?:[^/]+)', VARIABLES.directory);
+    // WriteDump(var = matches, label = 'directoryMinusDomain directory');
+    if (IsArray(matches) && 1 == ArrayLen(matches)) {
+      return Replace(VARIABLES.directory, matches[1], '');
     }
-    return getURL();
+    return '';
   }
 
-  public string function toSecureURL () {
-    setScheme('https');
-    return getURL();
+  private string function domainFromDirectory () {
+    // var matches = REMatchNoCase('\/(com|mu|tv)-([^/]+)', VARIABLES.directory);
+    var results = REFindNoCase('(com|mu|tv)-([^/]+)', VARIABLES.directory, 1, true);
+    // WriteDump(var = results, label = 'Domain From Directory Results');
+    var match = '';
+    var prefix = '';
+    var siteName = '';
+
+    if (IsStruct(results) && 3 == ArrayLen(results.pos)) {
+      match = Mid(VARIABLES.directory, results.pos[1], results.len[1]);
+      prefix = Mid(VARIABLES.directory, results.pos[2], results.len[2]);
+      siteName = Mid(VARIABLES.directory, results.pos[3], results.len[3]);
+    }
+
+    // WriteOutput('<div>Match #match#</div>');
+    // WriteOutput('<div>Prefix #prefix#</div>');
+    // WriteOutput('<div>Site Name #siteName#</div>');
+
+    if ('com' == prefix) {
+      return '#siteName#.com';
+    } else if ('mu' == prefix) {
+      return '#siteName#.mercer.edu';
+    } else if ('tv' == prefix) {
+      return '#siteName#.tv';
+    }
+
+    return '';
   }
 
-  public string function toS () {
-    var s = '';
+  public boolean function isAbsolute () {
+    return 1 == REFindNoCase('^[a-z][a-z0-9+.-]*:', url);
+  }
 
-    if (0 < Len(getScheme())) {
-      s &= '#getScheme()#://';
+  public boolean function isProtocolRelative () {
+    return '//' == Left(url, 2);
+  }
+
+  public boolean function isRelative () {
+    return !isAbsoluteURL(url);
+  }
+
+  public boolean function isRootRelative () {
+    if ('/' == Left(url, 1) && '/' != Mid(url, 2, 1)) {
+      return true;
     }
+    return false;
+  }
 
-    if (0 < Len(getAuthority())) {
-      s &= getAuthority();
+  public boolean function isHostMappedSubsite () {
+    return 1 == REFindNoCase('^(?:#request.site.CP_URL#|/)(?:com|mu|tv)-', directory);
+    return false;
+  }
+
+  /*
+   * There isn't much that can be done if a URL isn't already absolute,
+   * But relative in-CommonSpot URLs can be rewritten.
+   * So the URL returned might not actually be aboslute.
+   */
+  public string function toAbsolute () {
+    if (isHostMappedSubsite(getURL())) {
+      setDomain(domainFromDirectory());
+      // WriteOutput('<div>#directoryMinusDomain()#</div>');
+      setDirectory(directoryMinusDomain());
     }
-
-    s &= getPath();
-
-    return s;
+    if (0 < Len(getDomain()) && 0 == Len(getScheme())) {
+      setScheme('http');
+    }
+    return getURL();
   }
 
   public struct function toStruct() {
@@ -114,6 +269,10 @@ component accessors=true output=false persistent=false {
     };
   }
 
+  public string function directoryAt(n) {
+    return ListGetAt(getDirectory(), n, '/');
+  }
+
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
   ██████  ██████  ██ ██    ██  █████  ████████ ███████
@@ -123,73 +282,6 @@ component accessors=true output=false persistent=false {
   ██      ██   ██ ██   ████   ██   ██    ██    ███████
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
-
-  private void function setURLParts (required string url) {
-    var urlParts = parseUrl(ARGUMENTS.url);
-    // WriteDump(urlParts);
-    setScheme(urlParts.scheme);
-    setAuthority(urlParts.authority);
-    setPath(urlParts.path);
-    setDirectory(urlParts.directory);
-    setFile(urlParts.file);
-    setQuery(urlParts.query);
-    setFragment(urlParts.fragment);
-    setDomain(urlParts.domain);
-    setPort(urlParts.port);
-    setUsername(urlParts.username);
-    setPassword(urlParts.password);
-    setParams(urlParts.params);
-  }
-
-  private boolean function subsiteToSubdomain () {
-    var matches = [];
-    var regex = '^/(?:com|mu|tv)-';
-    var prefix = '';
-    var domains = [];
-
-    if ('com' == prefix) {
-      domains = ['com'];
-    } else if ('mu' == prefix) {
-      domains = ['mercer', 'edu'];
-    } else if ('tv' == prefix) {
-      domains = ['tv'];
-    }
-
-    return '';
-  }
-
-  private boolean function isSubsiteSubdomainURL (string url) {
-    var matches = [];
-    var regex = '^/(?:com|mu|tv)-';
-
-    if (IsDefined('request') &&
-        IsStruct(Request) &&
-        StructKeyExists(Request, 'site') &&
-        IsStruct(Request.Site) &&
-        StructKeyExists(Request.Site, 'name')) {
-      Insert('/#Request.Site.name#', regex, 1);
-    }
-    var matches = REFindNoCase(regex, url);
-
-    if (1 == ArrayLen(matches)) {
-      return false;
-    }
-
-  }
-
-  private boolean function isRelativeUrl (string url) {
-    // if ('./' == Left(url, 2) || '/' != Left(url, 1)) {
-    //   return true;
-    // }
-    return false;
-  }
-
-  private boolean function isRootRelativeUrl (string url) {
-    if ('/' == Left(url, 1) && '/' != Mid(url, 2, 1)) {
-      return true;
-    }
-    return false;
-  }
 
   /**
    * Parses a Url and returns a struct with keys defining the information in the Uri.

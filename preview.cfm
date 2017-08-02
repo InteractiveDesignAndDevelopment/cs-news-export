@@ -6,6 +6,11 @@
     <script src="https://cdn.jsdelivr.net/prism/1.6.0/prism.js"></script>
     <link href="https://cdn.jsdelivr.net/g/prism@1.6.0(themes/prism.css+themes/prism-coy.css)" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/normalize/7.0.0/normalize.css" rel="stylesheet">
+    <style>
+      body {
+        padding: 1rem;
+      }
+    </style>
   </head>
   <body>
 </cfoutput>
@@ -49,8 +54,9 @@
     WriteOutput('<h3>Importable Images</h3>');
     if (0 < importableImages.length()) {
       WriteOutput('<ul>');
-      ArrayEach(importableImages.toArray(), function(importableImage) {
-        WriteOutput('<li>#encodeForXML(importableImage.getHTML())#</li>');
+      ArrayEach(importableImages.toArray(), function(image) {
+        // WriteDump(image.toStruct());
+        WriteOutput('<li>#encodeForXML(image.getHTML())#</li>');
       });
       WriteOutput('</ul>');
     } else {
