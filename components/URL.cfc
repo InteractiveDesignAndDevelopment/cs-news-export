@@ -174,7 +174,11 @@ component accessors=true output=false persistent=false {
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
   private string function directoryMinusDomain () {
-    var matches = REMatchNoCase('/(?:com|mu|tv)-(?:[^/]+)', VARIABLES.directory);
+    var regex = '';
+    regex &= request.site.CP_URL;
+    regex &= '(?:com|mu|tv)-(?:[^/]+)';
+    // WriteDump(regex);
+    var matches = REMatchNoCase(regex, VARIABLES.directory);
     // WriteDump(var = matches, label = 'directoryMinusDomain directory');
     if (IsArray(matches) && 1 == ArrayLen(matches)) {
       return Replace(VARIABLES.directory, matches[1], '');
