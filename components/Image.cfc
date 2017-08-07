@@ -7,10 +7,12 @@
 component accessors=true output=false persistent=false {
 
   property name='html' type='string' default='';
-  property name='dom' type='object';
+  property name='document';
+  property name='element';
+  property name='url' type='string' default='';
 
   jSoup = createObject('java', 'org.jsoup.Jsoup');
-  dom = jSoup.parseBodyFragment('');
+  document = jSoup.parseBodyFragment('');
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -42,15 +44,20 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public void function setDOM (required any dom) {
-    VARIABLES.dom = ARGUMENTS.dom;
-    VARIABLES.html = VARIABLES.dom.body().html();
+  public void function setDOM (required any document) {
+    VARIABLES.document = ARGUMENTS.document;
+    // ---
+    VARIABLES.html = VARIABLES.document.body().html();
+    VARIABLES.element = VARIABLES.document.body().children()[1];
+    VARIABLES.url = VARIABLES.element.attr('src');
   }
 
   public void function setHTML (required string html) {
-    // writeDump(ARGUMENTS.html);
     VARIABLES.html = ARGUMENTS.html;
-    VARIABLES.dom =  jSoup.parseBodyFragment(ARGUMENTS.html);
+    // ---
+    VARIABLES.document =  jSoup.parseBodyFragment(VARIABLES.html);
+    VARIABLES.element = VARIABLES.document.body().children()[1];
+    VARIABLES.url = VARIABLES.element.attr('src');
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -65,23 +72,23 @@ component accessors=true output=false persistent=false {
 
   public component function importable () {
     // WriteDump(VARIABLES);
-    var dom = VARIABLES.dom;
+    var document = VARIABLES.document;
     whiteListAttributes('img', 'src');
-    ArrayEach(dom.select('img'), function(image) {
+    ArrayEach(document.select('img'), function(image) {
       var url = image.attr('src');
       url = new URL(url).toAbsolute();
       // WriteDump(url);
       image.attr('src', url);
     });
-    setDOM(dom);
+    setDOM(document);
     VARIABLES.html = encodeForXML(VARIABLES.html);
     return this;
   }
 
   public component function whiteListAttributes (required string tagName,
       required string whitelist) {
-    var dom = VARIABLES.dom;
-    var elements = dom.select(tagName);
+    var document = VARIABLES.document;
+    var elements = document.select(tagName);
     ArrayEach(elements, function(element) {
       ArrayEach(element.attributes().asList(), function(attr) {
         if (0 == ListFind(whitelist, attr.getKey())) {
@@ -89,14 +96,14 @@ component accessors=true output=false persistent=false {
         }
       });
     });
-    setDOM(dom);
+    setDOM(document);
     return this;
   }
 
   public struct function toStruct () {
     return {
       html = getHTML(),
-      dom = getDOM()
+      document = getDocument()
     };
   }
 

@@ -8,7 +8,7 @@ component accessors=true output=false persistent=false {
 
   _ = new Underscore();
   articles = [];
-  capiCustomElement = Server.CommonSpot.api.getObject('CustomElement');
+  // capiCustomElement = Server.CommonSpot.api.getObject('CustomElement');
   // id = customElementID();
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -43,7 +43,7 @@ component accessors=true output=false persistent=false {
 
   public component function all () {
     var ceData = application.adf.ceData.getCEData('News Article');
-    ceData = ArraySlice(ceData, 1, 10);
+    ceData = ArraySlice(ceData, ArrayLen(ceData) - 10, 10);
     articles = ceDataToArticlesArray(ceData);
     return this;
   }
@@ -64,14 +64,14 @@ component accessors=true output=false persistent=false {
     return this;
   }
 
-  public array function links () {
-    var tempArticles = articles;
-    tempArticles = ArrayMap(tempArticles, function(article) {
-      return article.links();
-    });
-    tempArticles = _.flatten(tempArticles);
-    return tempArticles;
-  }
+  // public array function links () {
+  //   var tempArticles = articles;
+  //   tempArticles = ArrayMap(tempArticles, function(article) {
+  //     return article.links();
+  //   });
+  //   tempArticles = _.flatten(tempArticles);
+  //   return tempArticles;
+  // }
 
   public array function toArray () {
     return articles;

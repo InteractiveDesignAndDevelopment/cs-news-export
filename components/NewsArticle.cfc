@@ -7,8 +7,8 @@
 component accessors=true output=false persistent=false {
 
   // This is the pageID value of a News Article custom element record
-  property name='pageID' type='numeric';
-  property name='formID' type='numeric';
+  property name='pageID'   type='numeric';
+  property name='formID'   type='numeric';
   property name='formName' type='string';
   // These are the fields in the News Article custom element
   property name='considerForUniversityHomepage'      type='numeric';
@@ -16,6 +16,7 @@ component accessors=true output=false persistent=false {
   property name='contactName'                        type='string';
   property name='contactPhone'                       type='string';
   property name='content'                            type='string';
+  property name='contentHTMLFragment'                type='any';
   property name='datePublished'                      type='string';
   property name='lblBusiness'                        type='string';
   property name='lblCHP'                             type='string';
@@ -66,7 +67,6 @@ component accessors=true output=false persistent=false {
 
   _ = new Underscore();
   jSoup = createObject('java', 'org.jsoup.Jsoup');
-  contentHTMLFragment = 0;
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -94,6 +94,64 @@ component accessors=true output=false persistent=false {
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+   █████   ██████  ██████ ███████ ███████ ███████  ██████  ██████  ███████
+  ██   ██ ██      ██      ██      ██      ██      ██    ██ ██   ██ ██
+  ███████ ██      ██      █████   ███████ ███████ ██    ██ ██████  ███████
+  ██   ██ ██      ██      ██           ██      ██ ██    ██ ██   ██      ██
+  ██   ██  ██████  ██████ ███████ ███████ ███████  ██████  ██   ██ ███████
+
+  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+  public string function getContent(boolean isForExport = false) {
+    if (! isForExport) {
+      return VARIABLES.content;
+    }
+
+    // writeDump(VARIABLES.contentHTMLFragment);
+    return VARIABLES.getContentHTMLFragment(true).getHTML();
+  }
+
+  public any function getContentHTMLFragment(boolean isForExport = false) {
+    if (! isForExport) {
+      return VARIABLES.contentHTMLFragment;
+    }
+
+    var tmp = VARIABLES.contentHTMLFragment;
+    var tmpDoc = tmp.importable().getDocument();
+    tmpDoc = cleanDocument(tmpDoc);
+    tmp.setDocument(tmpDoc);
+
+    return tmp;
+  }
+
+  public string function getSummaryHeaderPhoto(boolean isForExport = false) {
+    if (! isForExport) {
+      return VARIABLES.summaryHeaderPhoto;
+    }
+
+    if (0 == Len(VARIABLES.summaryHeaderPhoto)) {
+      return '';
+    }
+
+    var deciphered = Application.ADF.csData.decipherCPImage(VARIABLES.summaryHeaderPhoto);
+
+    // WriteDump(deciphered);
+
+    return deciphered.resolvedURL.absolute;
+  }
+
+  public void function setContent(required string content) {
+    VARIABLES.content = ARGUMENTS.content;
+    VARIABLES.contentHTMLFragment = new HTMLFragment(ARGUMENTS.content);
+  }
+
+  public void function setContentHTMLFragment(required component contentHTMLFragment) {
+    VARIABLES.contentHTMLFragment = ARGUMENTS.contentHTMLFragment;
+    VARIABLES.content = contentHTMLFragment.getHTML();
+  }
+
+  /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
   ██████  ██    ██ ██████  ██      ██  ██████
   ██   ██ ██    ██ ██   ██ ██      ██ ██
   ██████  ██    ██ ██████  ██      ██ ██
@@ -102,38 +160,16 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public string function importableContent() {
-    return new HTMLFragment(getContent()).importableHTML();
-  }
-
-  // public component function cleanContentDOM () {
-  //   return new FormattedTextBlock(getContent()).cleanDOM();
-  // }
-
-  // public array function cleanImages () {
-  //   return new FormattedTextBlock(getContent()).cleanImages();
-  // }
-
-  // public array function cleanLinks () {
-  //   return new FormattedTextBlock(getContent()).cleanLinks();
-  // }
-
-  // public component function contentDOM () {
-  //   return new FormattedTextBlock(getContent()).getDOM();
+  // public string function importableContent() {
+  //   return new HTMLFragment(getContent()).importableHTML();
   // }
 
   public component function images () {
-    return contentHTMLFragment.images();
+    return getContentHTMLFragment().images();
   }
 
   public component function links () {
-    return contentHTMLFragment.links();
-  }
-
-  public void function setContent (required string content) {
-    // writeDump(newContent);
-    VARIABLES.content = ARGUMENTS.content;
-    VARIABLES.contentHTMLFragment = new HTMLFragment(ARGUMENTS.content);
+    return getContentHTMLFragment(true).links();
   }
 
   public array function taxonomyArray () {
@@ -186,84 +222,102 @@ component accessors=true output=false persistent=false {
     return ArrayToList(taxonomyArray());
   }
 
-  public struct function toStruct () {
-    return {
-      // Standard custom element data
-      pageID   = getPageID(),
-      formID   = getFormID(),
-      formName = getFormName(),
-      // Custom elemement fields
-      considerForUniversityHomepage      = getConsiderForUniversityHomepage(),
-      contactEmail                       = getContactEmail(),
-      contactName                        = getContactName(),
-      contactPhone                       = getContactPhone(),
-      content                            = getContent(),
-      datePublished                      = getDatePublished(),
-      lblBusiness                        = getLblBusiness(),
-      lblEducation                       = getLblEducation(),
-      lblEngineering                     = getLblEngineering(),
-      lblLaw                             = getLblLaw(),
-      lblLiberalArts                     = getLblLiberalArts(),
-      lblMedicine                        = getLblMedicine(),
-      lblMercerUniversity                = getLblMercerUniversity(),
-      lblMusic                           = getLblMusic(),
-      lblNews                            = getLblNews(),
-      lblNursing                         = getLblNursing(),
-      lblPenfield                        = getLblPenfield(),
-      lblTheology                        = getLblTheology(),
-      lblWorkingAdultPrograms            = getLblWorkingAdultPrograms(),
-      showInBusinessNews                 = getShowInBusinessNews(),
-      showInCHPNews                      = getShowInCHPNews(),
-      showInEducationNews                = getShowInEducationNews(),
-      showInEngineeringNews              = getShowInEngineeringNews(),
-      showInLawNews                      = getShowInLawNews(),
-      showInLiberalArtsNews              = getShowInLiberalArtsNews(),
-      showInMedicineNews                 = getShowInMedicineNews(),
-      showInMusicNews                    = getShowInMusicNews(),
-      showInNursingNews                  = getShowInNursingNews(),
-      showInPenfieldNews                 = getShowInPenfieldNews(),
-      showInPharmacyNews                 = getShowInPharmacyNews(),
-      showInTheologyNews                 = getShowInTheologyNews(),
-      showInWorkingAdultProgramsNews     = getShowInWorkingAdultProgramsNews(),
-      showOnBusinessHomepage             = getShowOnBusinessHomepage(),
-      showOnCHPHomepage                  = getShowOnCHPHomepage(),
-      showOnEducationHomepage            = getShowOnEducationHomepage(),
-      showOnEngineeringHomepage          = getShowOnEngineeringHomepage(),
-      showOnLawHomepage                  = getShowOnLawHomepage(),
-      showOnLiberalArtsHomepage          = getShowOnLiberalArtsHomepage(),
-      showOnMedicineHomepage             = getShowOnMedicineHomepage(),
-      showOnMusicHomepage                = getShowOnMusicHomepage(),
-      showOnNewsHomepage                 = getShowOnNewsHomepage(),
-      showOnNursingHomepage              = getShowOnNursingHomepage(),
-      showOnPenfieldHomepage             = getShowOnPenfieldHomepage(),
-      showOnPharmacyHomepage             = getShowOnPharmacyHomepage(),
-      showOnTheologyHomepage             = getShowOnTheologyHomepage(),
-      showOnUniversityHomepage           = getShowOnUniversityHomepage(),
-      showOnWorkingAdultProgramsHomepage = getShowOnWorkingAdultProgramsHomepage(),
-      summary                            = getSummary(),
-      summaryHeaderPhoto                 = getSummaryHeaderPhoto(),
-      title                              = getTitle()
-    };
+  public struct function toStruct (boolean isForExport = false) {
+    if (isForExport) {
+      return toStructForXMLExport();
+    } else {
+      return toStructNotForXMLExport();
+    }
   }
 
-  // Tarteting the WP Import All plugin
+  // Tarteting the WP All Import plugin
   public struct function toStructForXMLExport () {
+    var s = {};
     var images = images().importable().toArray();
-    // WriteDump(images);
-    images = ArrayMap(images, function(image) {
-      // return image;
-      return image.getHTML();
-    });
-    var sfxe = {
-      content  = encodeForXML(getContent()),
-      summary  = encodeForXML(getSummary()),
-      title    = encodeForXML(getTitle()),
-      taxonomy = encodeForXML(taxonomyList())
-    };
+
+    s['date']     = encodeForXML(getDatePublished());
+    s['id']       = encodeForXML(getPageID());
+    s['content']  = encodeForXML(getContent(true));
+    s['summary']  = encodeForXML(getSummary());
+    s['title']    = encodeForXML(getTitle());
+    s['taxonomy'] = encodeForXML(taxonomyList());
+
     if (0 < ArrayLen(images)) {
-      sfxe['images'] = images;
+      // WriteDump(images);
+      images = ArrayMap(images, function(image) {
+        // return image;
+        return image.getUrl();
+      });
+      if (0 < Len(getSummaryHeaderPhoto(true))) {
+        ArrayPrepend(images, getSummaryHeaderPhoto(true));
+      }
+      s['images'] = images;
     }
-    return sfxe;
+
+    return s;
+  }
+
+  public struct function toStructNotForXMLExport () {
+    var s = {};
+
+    // Standard custom element data
+    s['pageID']   = getPageID();
+    s['formID']   = getFormID();
+    s['formName'] = getFormName();
+
+    // Custom elemement fields
+    s['considerForUniversityHomepage']      = getConsiderForUniversityHomepage();
+    s['contactEmail']                       = getContactEmail();
+    s['contactName']                        = getContactName();
+    s['contactPhone']                       = getContactPhone();
+    s['content']                            = getContent();
+    s['datePublished']                      = getDatePublished();
+    s['lblBusiness']                        = getLblBusiness();
+    s['lblEducation']                       = getLblEducation();
+    s['lblEngineering']                     = getLblEngineering();
+    s['lblLaw']                             = getLblLaw();
+    s['lblLiberalArts']                     = getLblLiberalArts();
+    s['lblMedicine']                        = getLblMedicine();
+    s['lblMercerUniversity']                = getLblMercerUniversity();
+    s['lblMusic']                           = getLblMusic();
+    s['lblNews']                            = getLblNews();
+    s['lblNursing']                         = getLblNursing();
+    s['lblPenfield']                        = getLblPenfield();
+    s['lblTheology']                        = getLblTheology();
+    s['lblWorkingAdultPrograms']            = getLblWorkingAdultPrograms();
+    s['showInBusinessNews']                 = getShowInBusinessNews();
+    s['showInCHPNews']                      = getShowInCHPNews();
+    s['showInEducationNews']                = getShowInEducationNews();
+    s['showInEngineeringNews']              = getShowInEngineeringNews();
+    s['showInLawNews']                      = getShowInLawNews();
+    s['showInLiberalArtsNews']              = getShowInLiberalArtsNews();
+    s['showInMedicineNews']                 = getShowInMedicineNews();
+    s['showInMusicNews']                    = getShowInMusicNews();
+    s['showInNursingNews']                  = getShowInNursingNews();
+    s['showInPenfieldNews']                 = getShowInPenfieldNews();
+    s['showInPharmacyNews']                 = getShowInPharmacyNews();
+    s['showInTheologyNews']                 = getShowInTheologyNews();
+    s['showInWorkingAdultProgramsNews']     = getShowInWorkingAdultProgramsNews();
+    s['showOnBusinessHomepage']             = getShowOnBusinessHomepage();
+    s['showOnCHPHomepage']                  = getShowOnCHPHomepage();
+    s['showOnEducationHomepage']            = getShowOnEducationHomepage();
+    s['showOnEngineeringHomepage']          = getShowOnEngineeringHomepage();
+    s['showOnLawHomepage']                  = getShowOnLawHomepage();
+    s['showOnLiberalArtsHomepage']          = getShowOnLiberalArtsHomepage();
+    s['showOnMedicineHomepage']             = getShowOnMedicineHomepage();
+    s['showOnMusicHomepage']                = getShowOnMusicHomepage();
+    s['showOnNewsHomepage']                 = getShowOnNewsHomepage();
+    s['showOnNursingHomepage']              = getShowOnNursingHomepage();
+    s['showOnPenfieldHomepage']             = getShowOnPenfieldHomepage();
+    s['showOnPharmacyHomepage']             = getShowOnPharmacyHomepage();
+    s['showOnTheologyHomepage']             = getShowOnTheologyHomepage();
+    s['showOnUniversityHomepage']           = getShowOnUniversityHomepage();
+    s['showOnWorkingAdultProgramsHomepage'] = getShowOnWorkingAdultProgramsHomepage();
+    s['summary']                            = getSummary();
+    s['summaryHeaderPhoto']                 = getSummaryHeaderPhoto();
+    s['title']                              = getTitle();
+
+    return s;
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -275,6 +329,76 @@ component accessors=true output=false persistent=false {
   ██      ██   ██ ██   ████   ██   ██    ██    ███████
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+  private any function cleanDocument(required any document) {
+    var tmpDoc = document;
+
+    tmpDoc = removeEndOfStory(tmpDoc);
+    tmpDoc = removeMediaContact(tmpDoc);
+
+    return tmpDoc;
+  }
+
+  private any function removeMediaContact (required any document) {
+    var tmpDoc = document;
+    var regexMediaContact = '';
+
+    regexMediaContact &= '\s*';
+    regexMediaContact &= 'Media';
+    regexMediaContact &= '\s+';
+    regexMediaContact &= 'Contact';
+    regexMediaContact &= '\s*:';
+    regexMediaContact &= '\s*';
+
+    ArrayEach(document.select('*'), function (element) {
+      if (1 == REFind(regexMediaContact, element.text())) {
+        element.remove();
+      }
+    });
+
+    return tmpDoc;
+  }
+
+  // https://en.wikipedia.org/wiki/%E2%80%9330%E2%80%93
+  private any function removeEndOfStory (required any document) {
+
+    var tmpDoc = document;
+    var regexEndOfStory = '';
+    var regexEndOfPressRelease = '\s*#chr(35)#{3}\s*'; // number sign
+
+    regexEndOfStory &= '\s*';
+    regexEndOfStory &= '(#chr(45)#|';   // hyphen-minus
+    regexEndOfStory &= '#chr(8208)#|';  // hyphen
+    regexEndOfStory &= '#chr(8210)#|';  // figure dash
+    regexEndOfStory &= '#chr(8213)#)';  // horizontal bar
+    regexEndOfStory &= '\s*';
+    regexEndOfStory &= '30';
+    regexEndOfStory &= '\s*';
+    regexEndOfStory &= '(#chr(45)#|';   // hyphen-minus
+    regexEndOfStory &= '#chr(8208)#|';  // hyphen
+    regexEndOfStory &= '#chr(8210)#|';  // figure dash
+    regexEndOfStory &= '#chr(8213)#)';  // horizontal bar
+    regexEndOfStory &= '\s*';
+
+    // WriteOutput('<div>#regex#</div>');
+
+    ArrayEach(tmpDoc.select('*'), function(element) {
+      var text = element.text();
+      if (1 == REFind(regexEndOfPressRelease, text)) {
+        element.remove();
+        return;
+      }
+      text = Replace(text, chr(150), '-');
+      text = Replace(text, chr(151), '-');
+      // WriteOutput('<div>#element.text()#</div>');
+      if (1 == REFind(regexEndOfStory, text)) {
+        element.remove();
+      }
+    });
+
+    return tmpDoc;
+
+  }
 
   private boolean function isTruthy(v) {
     if (0 == ArrayLen(ARGUMENTS)) {

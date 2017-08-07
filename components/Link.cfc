@@ -7,10 +7,12 @@
 component accessors=true output=false persistent=false {
 
   property name='html' type='string' default='';
-  property name='dom' type='object';
+  property name='document';
+  property name='element';
+  property name='url';
 
   jSoup = createObject('java', 'org.jsoup.Jsoup');
-  dom = jSoup.parseBodyFragment('');
+  document = jSoup.parseBodyFragment('');
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -40,14 +42,36 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public void function setDOM (required any dom) {
-    VARIABLES.dom = ARGUMENTS.dom;
-    VARIABLES.html = ARGUMENTS.dom.body().html();
+  public void function setDOM (required any document) {
+    VARIABLES.document = ARGUMENTS.document;
+    // ---
+    VARIABLES.html = VARIABLES.document.body().html();
+    VARIABLES.element = VARIABLES.document.body().children()[1];
+    VARIABLES.url = VARIABLES.element.attr('href');
   }
 
   public void function setHTML (required string html) {
     VARIABLES.html = ARGUMENTS.html;
-    VARIABLES.dom = jSoup.parseBodyFragment(ARGUMENTS.html);
+    // ---
+    VARIABLES.document = jSoup.parseBodyFragment(VARIABLES.html);
+    VARIABLES.element = VARIABLES.document.body().children()[1];
+    VARIABLES.url = VARIABLES.element.attr('href');
+  }
+
+  public void function setElement (required any element) {
+    VARIABLES.element = ARGUMENTS.element;
+    // ---
+    // VARIABLES.document = TODO
+    // VARIABLES.url = TODO
+    // VARIABLES.html = TODO
+  }
+
+  public void function setURL (required string url) {
+    VARIABLES.url = ARGUMENTS.url;
+    // ---
+    // VARIABLES.element = TODO
+    // VARIABLES.document = TODO
+    // VARIABLES.html = TODO
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -61,8 +85,8 @@ component accessors=true output=false persistent=false {
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
   public component function importable () {
-    setDOM(whiteListAttributes(dom, 'a', 'href'));
-    ArrayEach(dom.select('a'), function(a) {
+    setDocument(whiteListAttributes(document, 'a', 'href'));
+    ArrayEach(document.select('a'), function(a) {
       var url = '';
       if (a.hasAttr('href')) {
         url = a.attr('href');

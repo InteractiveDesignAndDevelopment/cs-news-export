@@ -232,7 +232,10 @@ component accessors=true output=false persistent=false {
 
   public boolean function isHostMappedSubsite () {
     return 1 == REFindNoCase('^(?:#request.site.CP_URL#|/)(?:com|mu|tv)-', directory);
-    return false;
+  }
+
+  public boolean function isInSiteRoot () {
+    return 1 == FindNoCase(request.site.CP_URL, directory);
   }
 
   /*
@@ -241,10 +244,14 @@ component accessors=true output=false persistent=false {
    * So the URL returned might not actually be aboslute.
    */
   public string function toAbsolute () {
-    if (isHostMappedSubsite(getURL())) {
+    if (isHostMappedSubsite()) {
       setDomain(domainFromDirectory());
       // WriteOutput('<div>#directoryMinusDomain()#</div>');
       setDirectory(directoryMinusDomain());
+    } else if (isInSiteRoot()) {
+      // e.g. /www/images/Ted-Matthews.jpg
+      // Default subsite for the default image gallery is the root subsite
+      setDomain('www.mercer.edu');
     }
     if (0 < Len(getDomain()) && 0 == Len(getScheme())) {
       setScheme('http');
