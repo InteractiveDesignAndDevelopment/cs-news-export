@@ -66,7 +66,6 @@ component accessors=true output=false persistent=false {
   property name='title'                              type='string';
 
   _ = new Underscore();
-  jSoup = createObject('java', 'org.jsoup.Jsoup');
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -336,7 +335,6 @@ component accessors=true output=false persistent=false {
   private any function cleanDocument(required any document) {
     var tmpDoc = document;
 
-    tmpDoc = removeEndOfStory(tmpDoc);
     tmpDoc = removeMediaContact(tmpDoc);
 
     return tmpDoc;
@@ -360,47 +358,6 @@ component accessors=true output=false persistent=false {
     });
 
     return tmpDoc;
-  }
-
-  // https://en.wikipedia.org/wiki/%E2%80%9330%E2%80%93
-  private any function removeEndOfStory (required any document) {
-
-    var tmpDoc = document;
-    var regexEndOfStory = '';
-    var regexEndOfPressRelease = '\s*#chr(35)#{3}\s*'; // number sign
-
-    regexEndOfStory &= '\s*';
-    regexEndOfStory &= '(#chr(45)#|';   // hyphen-minus
-    regexEndOfStory &= '#chr(8208)#|';  // hyphen
-    regexEndOfStory &= '#chr(8210)#|';  // figure dash
-    regexEndOfStory &= '#chr(8213)#)';  // horizontal bar
-    regexEndOfStory &= '\s*';
-    regexEndOfStory &= '30';
-    regexEndOfStory &= '\s*';
-    regexEndOfStory &= '(#chr(45)#|';   // hyphen-minus
-    regexEndOfStory &= '#chr(8208)#|';  // hyphen
-    regexEndOfStory &= '#chr(8210)#|';  // figure dash
-    regexEndOfStory &= '#chr(8213)#)';  // horizontal bar
-    regexEndOfStory &= '\s*';
-
-    // WriteOutput('<div>#regex#</div>');
-
-    ArrayEach(tmpDoc.select('*'), function(element) {
-      var text = element.text();
-      if (1 == REFind(regexEndOfPressRelease, text)) {
-        element.remove();
-        return;
-      }
-      text = Replace(text, chr(150), '-');
-      text = Replace(text, chr(151), '-');
-      // WriteOutput('<div>#element.text()#</div>');
-      if (1 == REFind(regexEndOfStory, text)) {
-        element.remove();
-      }
-    });
-
-    return tmpDoc;
-
   }
 
   private boolean function isTruthy(v) {
