@@ -24,7 +24,12 @@
         <li><a href="./articles-export.cfm">Export</a></li>
       </ul>
 
+      <h2>README</h2>
+
+      <pre><code><cfinclude  template="./README.md"></code></pre>
+
       <cfinclude template = "./includes/bottom.cfm">
+
     </body>
   </html>
 </cfoutput>
