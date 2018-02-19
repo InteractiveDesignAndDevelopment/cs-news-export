@@ -37,20 +37,79 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
+  public array function altAttributesArray () {
+    var a = images;
+
+    a = ArrayMap(a, function(image) {
+      return image.getElement().attr('alt');
+    });
+
+    return a;
+  }
+
+  public string function altAttributesList () {
+
+  }
+
+  public string function altAttributesOnePerLine () {
+
+  }
+
   public numeric function length () {
     return ArrayLen(images);
   }
 
   public component function importable () {
-    images = ArrayMap(images, function(image) {
+    var a = images;
+
+    a = ArrayMap(images, function(image) {
       // writeDump(image);
       return image.importable();
     });
+
+    images = a;
+
     return this;
+  }
+
+  public array function titleAttributesArray () {
+    var a = images;
+
+    a = ArrayMap(a, function(image) {
+
+    });
+
+    return a;
+  }
+
+  public string function titleAttributesList () {
+
+  }
+
+  public string function titleAttributesOnePerLine () {
+
   }
 
   public array function toArray () {
     return images;
+  }
+
+  public array function urlsArray () {
+    var a = images;
+
+    a = ArrayMap(a, function(image) {
+      return image.getElement().attr('src');
+    });
+
+    return a;
+  }
+
+  public string function urlsList () {
+    return ArrayToList(urlsArray());
+  }
+
+  public string function urlsOnePerLine () {
+    return Replace(urlsList(), ',', chr(10));
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

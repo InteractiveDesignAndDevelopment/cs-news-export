@@ -7,12 +7,23 @@
     </head>
     <body>
       <cfinclude template = "./includes/top.cfm">
+
       <h1>News Export</h1>
-      <h2>Articles</h2>
+
+      <h2>Authors</h2>
+
       <ul>
-        <li><a href="./articles-preview.cfm">Preview</\\a></li>
+        <li><a href="./authors-preview.cfm">Preview</a></li>
+        <li><a href="./author-export.cfm">Export </a></li>
+      </ul>
+
+      <h2>Articles</h2>
+
+      <ul>
+        <li><a href="./articles-preview.cfm">Preview</a></li>
         <li><a href="./articles-export.cfm">Export</a></li>
       </ul>
+
       <cfinclude template = "./includes/bottom.cfm">
     </body>
   </html>
