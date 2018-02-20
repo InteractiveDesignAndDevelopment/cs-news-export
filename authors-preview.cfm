@@ -1,7 +1,10 @@
 <cfscript>
+  // authors = new components.Authors('all');
+  // authors = new components.Authors('all').unique();
   authors = new components.Authors('all').unique().sort();
 
   // WriteDump(var = authors.toArray(), label = 'Preview Authors Array');
+  // exit;
   // WriteDump(var = authors, label = 'Preview Authors');
   // WriteDump(authors.first());
 
@@ -17,15 +20,15 @@
       <cfloop array="#authors.toArray()#" index="author">
         <p>
           <div>
-            Username: #author.getUsername()#<br>
-            Email: #author.getEmailAddress()#<br>
-            Name: #author.getName()#
+            Username: #author.getLogin()#<br>
+            Email: #author.getEmail()#<br>
+            Display Name: #author.getDisplayName()#
           </div>
         </p>
         <hr/>
       </cfloop>
 
-    <cfinclude template="./includes/top.cfm">
+    <cfinclude template="./includes/bottom.cfm">
   </body>
 </html>
 </cfoutput>
