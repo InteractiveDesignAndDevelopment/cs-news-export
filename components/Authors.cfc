@@ -6,7 +6,7 @@
  **/
 component accessors=true output=false persistent=false {
 
-  property name='ceData' type='array';
+  authors = [];
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -18,21 +18,76 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
+  /*
+   * There are three possible ways to set
+   * - No arguments = all
+   * - String 'all' = all
+   * - A single number = just the author of that article
+   * -
+   */
   public component function init () {
-    if (1 == ArrayLen(ARGUMENTS)) {
-      if (IsSimpleValue(ARGUMENTS[1])) {
-        if (IsNumeric(ARGUMENTS[1])) {
-          setCEData(findByPageID(ARGUMENTS[1]));
-        } else if ('all' == LCase(ARGUMENTS[1])) {
-          // WriteOutput('<div>All News Articles</div>');
-          setCEData(application.adf.ceData.getCEData('News Article'));
-        }
-      } else if (IsArray(ARGUMENTS[1])) {
-        setCEData(ARGUMENTS[1]);
-      }
+    var articles = arrayNew(1);
+    var tmpAuthors = arrayNew(1);
+
+    // writeOutput("#arrayLen(ARGUMENTS)# - #isArray(ARGUMENTS[1])#");
+    // writeDump(ARGUMENTS[1]);
+
+    if (0 == ArrayLen(ARGUMENTS) ||
+      (1 == ArrayLen(ARGUMENTS) && isSimpleValue(ARGUMENTS[1]) && 'all' == ARGUMENTS[1])) {
+        articles = application.adf.ceData.getCEData('News Article');
+        // articles = application.adf.ceData.getCEData(
+        //   customElementName = 'News Article',
+        //   customElementFieldName = 'datePublished',
+        //   item = '2018-01-01,2018-01-31',
+        //   queryType = 'between');
+    } else if (1 == arrayLen(ARGUMENTS) && isArray(ARGUMENTS[1]) &&
+      0 < arrayLen(ARGUMENTS[1]) && isObject(ARGUMENTS[1][1]) &&
+      structKeyExists(ARGUMENTS[1][1], 'getLogin') &&
+      structKeyExists(ARGUMENTS[1][1], 'getEmail') &&
+      structKeyExists(ARGUMENTS[1][1], 'getDisplayName') &&
+      structKeyExists(ARGUMENTS[1][1], 'getFirstName') &&
+      structKeyExists(ARGUMENTS[1][1], 'getLastName') &&
+      structKeyExists(ARGUMENTS[1][1], 'getRole')) {
+        tmpAuthors = ARGUMENTS[1];
     }
 
-    // setCEData([]);
+    // TODO: implement searching by pageiD with getElementInfoByPageID
+
+    arrayEach(articles, function(article) {
+      // writeDump(article);
+
+      var values      = article.values;
+      var email       = values.contactEmail;
+      var login       = emailToLogin(email);
+      var displayName = values.contactName;
+      var firstName   = '';
+      var lastName    = '';
+      var role        = 'Subscriber';
+
+      // if () {
+        // TODO: Get user record from login
+      // }
+
+      if (0 == Len(Trim(login))) {
+        login       = 'news';
+        email       = 'news@mercer';
+        displayName = 'News@Mercer';
+        firstName   = '';
+        lastName    = '';
+      }
+
+      var author = new Author(
+        login       = login,
+        email       = email,
+        displayName = displayName,
+        firstName   = firstName,
+        lastName    = lastName,
+        role        = role);
+
+      arrayAppend(tmpAuthors, author);
+    });
+
+    variables.authors = tmpAuthors;
 
     return this;
   }
@@ -58,17 +113,17 @@ component accessors=true output=false persistent=false {
   // }
 
   // ceData without media contact information is filtered out
-  public void function setCEData (required array ceData) {
-    var tmpCEData = ceData;
+  // public void function setCEData (required array ceData) {
+  //   var tmpCEData = ceData;
 
-    tmpCEData = ArrayFilter(tmpCEData, function(ceDatum) {
-      return 0 < Len(ceDatum.values.contactEmail) && 0 < Len(ceDatum.values.contactName);
-    });
+  //   tmpCEData = ArrayFilter(tmpCEData, function(ceDatum) {
+  //     return 0 < Len(ceDatum.values.contactEmail) && 0 < Len(ceDatum.values.contactName);
+  //   });
 
-    VARIABLES.ceData = tmpCEData;
+  //   VARIABLES.ceData = tmpCEData;
 
-    // WriteDump(ceData);
-  }
+  //   // WriteDump(ceData);
+  // }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -80,54 +135,59 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public component function findByPageID (required numeric id) {
-    var ceData = ArrayFilter(getCEData(), function (datum) {
-      return ARGUMENTS.id == datum.pageID;
-    });
-
-    return new Authors(ceData);
-  }
-
+  /*
+   * Return the first author
+   */
   public component function first (numeric x = 1) {
-    if (length() < x) {
-      x = length();
-    }
+    // if (length() < x) {
+    //   x = length();
+    // }
 
-    var tmpCEData = ArraySlice(getCEData(), 1, x);
+    // var tmpCEData = ArraySlice(getCEData(), 1, x);
 
-    return new Authors(tmpCEData);
+    // return new Authors(tmpCEData);
   }
 
+  /*
+   * Return the author at a specific index
+   */
   public component function get (required numeric x) {
-    return new Author(getCEData()[x]);
+    // return new Author(getCEData()[x]);
   }
 
+  /*
+   * Return the last author
+   */
   public component function last (numeric x = 1) {
-    if (length() < x) {
-      x = length();
-    }
+    // if (length() < x) {
+    //   x = length();
+    // }
 
-    var tmpCEData = ArraySlice(getCEData(), length() - x, x);
+    // var tmpCEData = ArraySlice(getCEData(), length() - x, x);
 
-    return new Authors(tmpCEData);
+    // return new Authors(tmpCEData);
   }
 
+  /*
+   * Return how many authors there are
+   */
   public numeric function length () {
-    return ArrayLen(getCEData());
+    // return ArrayLen(getCEData());
   }
 
-  public component function sort (sortProp = 'username') {
-    var tmpCEData = getCEData();
+  /*
+   * Return the authors sorted by the given property
+   */
+  public component function sort (sortProp = 'login') {
+    var tmpAuthors = variables.authors;
 
-    ArraySort(tmpCEData, function(e1, e2) {
-      var a1 = new Author(e1);
-      var a2 = new Author(e2);
+    ArraySort(tmpAuthors, function(a1, a2) {
       var v1 = '';
       var v2 = '';
 
       if ('username' == sortProp) {
-        v1 = LCase(a1.getUserName());
-        v2 = LCase(a2.getUserName());
+        v1 = LCase(a1.getUserLogin());
+        v2 = LCase(a2.getUserLogin());
       }
 
       // WriteOutput('<div>v1 = #v1#</div>');
@@ -136,38 +196,38 @@ component accessors=true output=false persistent=false {
       return compare(v1, v2);
     });
 
-    return new Authors(tmpCEData);
+    // return this;
+    return new Authors(tmpAuthors);
   }
 
+  /*
+   * Return an array of all the authors
+   */
   public array function toArray () {
-    var arr = getCEData();
-
-    // WriteDump(var = getCEData(), label = 'toArray ceData');
-
-    arr = ArrayMap(arr, function(ceDatum) {
-      return new Author(ceDatum);
-    });
-
-    return arr;
+    return variables.authors;
   }
 
+  /*
+   * Return only one author for each distinct login property defined
+   * in the author object
+   */
   public component function unique () {
-    var tmpCEData = getCEData();
-    var seenUserNames = [];
+    var seenLogins = arrayNew(1);
+    var tmpAuthors = variables.authors;
 
-    tmpCEData = ArrayFilter(tmpCEData, function(ceDatum) {
-      var a = new Author(ceDatum);
-      var u = a.getUsername();
-
-      if (! ArrayFindNoCase(seenUserNames, u)) {
-        ArrayAppend(seenUserNames, u);
+    tmpAuthors = ArrayFilter(tmpAuthors, function(author) {
+      var login = author.getLogin();
+      if (! ArrayFindNoCase(seenLogins, login)) {
+        ArrayAppend(seenLogins, login);
         return true;
       } else {
         return false;
       }
     });
 
-    return new Authors(tmpCEData);
+    // writeDump(tmpAuthors);
+
+    return new Authors(tmpAuthors);
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -179,5 +239,13 @@ component accessors=true output=false persistent=false {
   ██      ██   ██ ██   ████   ██   ██    ██    ███████
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+  /*
+   * Return the login derived from the given email address.
+   * This is a blunt instrument; wield with caution.
+   */
+  private function emailToLogin(required string email) {
+    return listFirst(email, '@');
+  }
 
 }

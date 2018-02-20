@@ -6,11 +6,12 @@
  **/
 component accessors=true output=false persistent=false {
 
-  property name='ceDatum' type='struct';
-
-  name = '';
-  userName = '';
-  emailAddress = '';
+  property name='displayName' type='string';
+  property name='email'       type='string';
+  property name='firstName'   type='string';
+  property name='lastName'    type='string';
+  property name='login'       type='string';
+  property name='role'        type='string';
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -22,38 +23,22 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public component function init (required struct ceDatum) {
+  public component function init (
+      required string login,
+      required string email,
+      required string displayName,
+      required string firstName,
+      required string lastName,
+      required string role) {
 
-    setCEDatum(ARGUMENTS.ceDatum);
+    variables.login       = arguments.login;
+    variables.email       = arguments.email;
+    variables.displayName = arguments.displayName;
+    variables.firstName   = arguments.firstName;
+    variables.lastName    = arguments.lastName;
+    variables.role        = arguments.role;
 
     return this;
-  }
-
-  /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-   █████   ██████  ██████ ███████ ███████ ███████  ██████  ██████  ███████
-  ██   ██ ██      ██      ██      ██      ██      ██    ██ ██   ██ ██
-  ███████ ██      ██      █████   ███████ ███████ ██    ██ ██████  ███████
-  ██   ██ ██      ██      ██           ██      ██ ██    ██ ██   ██      ██
-  ██   ██  ██████  ██████ ███████ ███████ ███████  ██████  ██   ██ ███████
-
-  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
-
-  public string function getEmailAddress () {
-    return LCase(getCEDatum().values.contactEmail);
-  }
-
-  public string function getName () {
-    // WriteDump(getCEDatum());
-    return getCEDatum().values.contactName;
-  }
-
-  public string function getUsername () {
-    return LCase(ListFirst(getCEDatum().values.contactEmail, '@'));
-  }
-
-  public void function setCEDatum (required struct ceDatum) {
-    VARIABLES.ceDatum = ARGUMENTS.ceDatum;
   }
 
 }
