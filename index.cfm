@@ -26,9 +26,11 @@
 
       <h2>README</h2>
 
-      <pre><code><cfinclude  template="./README.md"></code></pre>
-
-      <cfinclude template = "./includes/bottom.cfm">
+      <pre><code><cfscript>
+        readMe = fileRead(expandPath('./README.md'));
+        readMe = htmlCodeFormat(readMe);
+        writeOutput(readMe);
+      </cfscript></code></pre>
 
     </body>
   </html>
