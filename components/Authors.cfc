@@ -60,8 +60,8 @@ component accessors=true output=false persistent=false {
       var email       = values.contactEmail;
       var login       = emailToLogin(email);
       var displayName = values.contactName;
-      var firstName   = '';
-      var lastName    = '';
+      var firstName   = displayNameToFirstName(displayName);
+      var lastName    = displayNameToLastName(displayName);
       var role        = 'Subscriber';
 
       // if () {
@@ -185,9 +185,9 @@ component accessors=true output=false persistent=false {
       var v1 = '';
       var v2 = '';
 
-      if ('username' == sortProp) {
-        v1 = LCase(a1.getUserLogin());
-        v2 = LCase(a2.getUserLogin());
+      if ('login' == sortProp) {
+        v1 = LCase(a1.getLogin());
+        v2 = LCase(a2.getLogin());
       }
 
       // WriteOutput('<div>v1 = #v1#</div>');
@@ -246,6 +246,22 @@ component accessors=true output=false persistent=false {
    */
   private function emailToLogin(required string email) {
     return listFirst(email, '@');
+  }
+
+  /*
+   * Return the last named derived from the display name
+   * There are better ways of doing this, but this should suffice
+   */
+  private function displayNameToFirstName(required string displayName) {
+    return listFirst(displayName, ' ');
+  }
+
+  /*
+   * Return the first named derived from the display name
+   * There are better ways of doing this, but this should suffice
+   */
+  private function displayNameToLastName(required string displayName) {
+    return listLast(displayName, ' ');
   }
 
 }

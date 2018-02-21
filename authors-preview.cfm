@@ -8,25 +8,67 @@
   // WriteDump(var = authors, label = 'Preview Authors');
   // WriteDump(authors.first());
 
+  authorsArray = authors.toArray();
+
 </cfscript><cfoutput><!doctype html>
 <html>
   <head>
-    <title>Export News Articles</title>
+    <title>#arrayLen(authorsArray)# Authors</title>
     <cfinclude template="./includes/head.cfm">
   </head>
   <body>
     <cfinclude template="./includes/top.cfm">
 
-      <cfloop array="#authors.toArray()#" index="author">
-        <p>
-          <div>
-            Username: #author.getLogin()#<br>
-            Email: #author.getEmail()#<br>
-            Display Name: #author.getDisplayName()#
-          </div>
-        </p>
-        <hr/>
-      </cfloop>
+    <h1>#arrayLen(authorsArray)# Authors</h1>
+
+    <table class="DataTable">
+      <thead>
+        <tr>
+          <th>
+            Login
+          </th>
+          <th>
+            Email
+          </th>
+          <th>
+            Display Name
+          </th>
+          <th>
+            First Name
+          </th>
+          <th>
+            Last Name
+          </th>
+          <th>
+            Role
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <cfloop array="#authorsArray#" index="author">
+          <tr>
+            <td>
+              #author.getLogin()#
+            </td>
+            <td>
+              #author.getEmail()#
+            </td>
+            <td>
+              #author.getDisplayName()#
+            </td>
+            <td>
+              #author.getFirstName()#
+            </td>
+            <td>
+              #author.getLastName()#
+            </td>
+            <td>
+              #author.getRole()#
+            </td>
+          </tr>
+        </cfloop>
+      </tbody>
+    </table>
 
     <cfinclude template="./includes/bottom.cfm">
   </body>
