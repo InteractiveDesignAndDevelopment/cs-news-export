@@ -28,7 +28,7 @@ This project exports the CS News Articles for importing into the new WordPress N
     <content />
     <excerpt />
     <images />
-    <pageid />
+    <cs_page_id />
     <categories />
     <tags />
     <post_date />

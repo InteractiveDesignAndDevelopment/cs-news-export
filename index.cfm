@@ -20,6 +20,7 @@
       <h2>Articles</h2>
 
       <ul>
+        <li><a href="./articles-dump.cfm">Dump</a></li>
         <li><a href="./articles-preview.cfm">Preview</a></li>
         <li><a href="./articles-export.cfm">Export</a></li>
       </ul>

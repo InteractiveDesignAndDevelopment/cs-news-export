@@ -6,66 +6,64 @@
  **/
 component accessors=true output=false persistent=false {
 
-  // This is the pageID value of a News Article custom element record
-  property name='pageID'   type='numeric';
-  property name='formID'   type='numeric';
-  property name='formName' type='string';
-  // These are the fields in the News Article custom element
-  property name='considerForUniversityHomepage'      type='numeric';
-  property name='contactEmail'                       type='string';
-  property name='contactName'                        type='string';
-  property name='contactPhone'                       type='string';
-  property name='content'                            type='string';
-  property name='contentHTMLFragment'                type='any';
-  property name='datePublished'                      type='string';
-  property name='lblBusiness'                        type='string';
-  property name='lblCHP'                             type='string';
-  property name='lblEducation'                       type='string';
-  property name='lblEngineering'                     type='string';
-  property name='lblLaw'                             type='string';
-  property name='lblLiberalArts'                     type='string';
-  property name='lblMedicine'                        type='string';
-  property name='lblMercerUniversity'                type='string';
-  property name='lblMusic'                           type='string';
-  property name='lblNews'                            type='string';
-  property name='lblNursing'                         type='string';
-  property name='lblPenfield'                        type='string';
-  property name='lblPharmacy'                        type='string';
-  property name='lblTheology'                        type='string';
-  property name='lblWorkingAdultPrograms'            type='string';
-  property name='showInBusinessNews'                 type='numeric';
-  property name='showInCHPNews'                      type='numeric';
-  property name='showInEducationNews'                type='numeric';
-  property name='showInEngineeringNews'              type='numeric';
-  property name='showInLawNews'                      type='numeric';
-  property name='showInLiberalArtsNews'              type='numeric';
-  property name='showInMedicineNews'                 type='numeric';
-  property name='showInMusicNews'                    type='numeric';
-  property name='showInNursingNews'                  type='numeric';
-  property name='showInPenfieldNews'                 type='numeric';
-  property name='showInPharmacyNews'                 type='numeric';
-  property name='showInTheologyNews'                 type='numeric';
-  property name='showInWorkingAdultProgramsNews'     type='numeric';
-  property name='showOnBusinessHomepage'             type='numeric';
-  property name='showOnCHPHomepage'                  type='numeric';
-  property name='showOnEducationHomepage'            type='numeric';
-  property name='showOnEngineeringHomepage'          type='numeric';
-  property name='showOnLawHomepage'                  type='numeric';
-  property name='showOnLiberalArtsHomepage'          type='numeric';
-  property name='showOnMedicineHomepage'             type='numeric';
-  property name='showOnMusicHomepage'                type='numeric';
-  property name='showOnNewsHomepage'                 type='numeric';
-  property name='showOnNursingHomepage'              type='numeric';
-  property name='showOnPenfieldHomepage'             type='numeric';
-  property name='showOnPharmacyHomepage'             type='numeric';
-  property name='showOnTheologyHomepage'             type='numeric';
-  property name='showOnUniversityHomepage'           type='numeric';
-  property name='showOnWorkingAdultProgramsHomepage' type='numeric';
-  property name='summary'                            type='string';
-  property name='summaryHeaderPhoto'                 type='string';
-  property name='title'                              type='string';
+  // CommonSpot custom element record
+  property name='csPageID'   type='numeric';
 
-  _ = new Underscore();
+  // Fields in the CommonSpot News Article custom element
+  property name='csConsiderForUniversityHomepage'      type='string';
+  property name='csContactEmail'                       type='string';
+  property name='csContactName'                        type='string';
+  property name='csContactPhone'                       type='string';
+  property name='csContent'                            type='string';
+  property name='csDatePublished'                      type='string';
+  property name='csLblBusiness'                        type='string';
+  property name='csLblCHP'                             type='string';
+  property name='csLblEducation'                       type='string';
+  property name='csLblEngineering'                     type='string';
+  property name='csLblLaw'                             type='string';
+  property name='csLblLiberalArts'                     type='string';
+  property name='csLblMedicine'                        type='string';
+  property name='csLblMercerUniversity'                type='string';
+  property name='csLblMusic'                           type='string';
+  property name='csLblNews'                            type='string';
+  property name='csLblNursing'                         type='string';
+  property name='csLblPenfield'                        type='string';
+  property name='csLblPharmacy'                        type='string';
+  property name='csLblTheology'                        type='string';
+  property name='csLblWorkingAdultPrograms'            type='string';
+  property name='csShowInBusinessNews'                 type='string';
+  property name='csShowInCHPNews'                      type='string';
+  property name='csShowInEducationNews'                type='string';
+  property name='csShowInEngineeringNews'              type='string';
+  property name='csShowInLawNews'                      type='string';
+  property name='csShowInLiberalArtsNews'              type='string';
+  property name='csShowInMedicineNews'                 type='string';
+  property name='csShowInMusicNews'                    type='string';
+  property name='csShowInNursingNews'                  type='string';
+  property name='csShowInPenfieldNews'                 type='string';
+  property name='csShowInPharmacyNews'                 type='string';
+  property name='csShowInTheologyNews'                 type='string';
+  property name='csShowInWorkingAdultProgramsNews'     type='string';
+  property name='csShowOnBusinessHomepage'             type='string';
+  property name='csShowOnCHPHomepage'                  type='string';
+  property name='csShowOnEducationHomepage'            type='string';
+  property name='csShowOnEngineeringHomepage'          type='string';
+  property name='csShowOnLawHomepage'                  type='string';
+  property name='csShowOnLiberalArtsHomepage'          type='string';
+  property name='csShowOnMedicineHomepage'             type='string';
+  property name='csShowOnMusicHomepage'                type='string';
+  property name='csShowOnNewsHomepage'                 type='string';
+  property name='csShowOnNursingHomepage'              type='string';
+  property name='csShowOnPenfieldHomepage'             type='string';
+  property name='csShowOnPharmacyHomepage'             type='string';
+  property name='csShowOnTheologyHomepage'             type='string';
+  property name='csShowOnUniversityHomepage'           type='string';
+  property name='csShowOnWorkingAdultProgramsHomepage' type='string';
+  property name='csSummary'                            type='string';
+  property name='csSummaryHeaderPhoto'                 type='string';
+  property name='csTitle'                              type='string';
+
+  jSoup = createObject('java', 'org.jsoup.Jsoup');
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -77,17 +75,115 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public component function init () {
-    if (1 == ArrayLen(ARGUMENTS)) {
-      // WriteDump(ARGUMENTS[1]);
-      if (IsStruct(ARGUMENTS[1])) {
-        if (StructKeyExists(ARGUMENTS[1], 'Values')) {
-          StructAppend(ARGUMENTS[1], ARGUMENTS[1].Values);
-          StructDelete(ARGUMENTS[1], 'Values');
-        }
-        setFromStruct(ARGUMENTS[1]);
-      }
-    }
+  public component function init (
+    csPageID,
+    csConsiderForUniversityHomepage,
+    csContactEmail,
+    csContactName,
+    csContactPhone,
+    csContent,
+    csDatePublished,
+    csLblBusiness,
+    csLblCHP,
+    csLblEducation,
+    csLblEngineering,
+    csLblLaw,
+    csLblLiberalArts,
+    csLblMedicine,
+    csLblMercerUniversity,
+    csLblMusic,
+    csLblNews,
+    csLblNursing,
+    csLblPenfield,
+    csLblPharmacy,
+    csLblTheology,
+    csLblWorkingAdultPrograms,
+    csShowInBusinessNews,
+    csShowInCHPNews,
+    csShowInEducationNews,
+    csShowInEngineeringNews,
+    csShowInLawNews,
+    csShowInLiberalArtsNews,
+    csShowInMedicineNews,
+    csShowInMusicNews,
+    csShowInNursingNews,
+    csShowInPenfieldNews,
+    csShowInPharmacyNews,
+    csShowInTheologyNews,
+    csShowInWorkingAdultProgramsNews,
+    csShowOnBusinessHomepage,
+    csShowOnCHPHomepage,
+    csShowOnEducationHomepage,
+    csShowOnEngineeringHomepage,
+    csShowOnLawHomepage,
+    csShowOnLiberalArtsHomepage,
+    csShowOnMedicineHomepage,
+    csShowOnMusicHomepage,
+    csShowOnNewsHomepage,
+    csShowOnNursingHomepage,
+    csShowOnPenfieldHomepage,
+    csShowOnPharmacyHomepage,
+    csShowOnTheologyHomepage,
+    csShowOnUniversityHomepage,
+    csShowOnWorkingAdultProgramsHomepage,
+    csSummary,
+    csSummaryHeaderPhoto,
+    csTitle
+  ) {
+    setCsPageID(arguments.csPageID);
+    setCsConsiderForUniversityHomepage(arguments.csConsiderForUniversityHomepage);
+    setCsContactEmail(arguments.csContactEmail);
+    setCsContactName(arguments.csContactName);
+    setCsContactPhone(arguments.csContactPhone);
+    setCsContent(arguments.csContent);
+    setCsDatePublished(arguments.csDatePublished);
+    setCsLblBusiness(arguments.csLblBusiness);
+    setCsLblCHP(arguments.csLblCHP);
+    setCsLblEducation(arguments.csLblEducation);
+    setCsLblEngineering(arguments.csLblEngineering);
+    setCsLblLaw(arguments.csLblLaw);
+    setCsLblLiberalArts(arguments.csLblLiberalArts);
+    setCsLblMedicine(arguments.csLblMedicine);
+    setCsLblMercerUniversity(arguments.csLblMercerUniversity);
+    setCsLblMusic(arguments.csLblMusic);
+    setCsLblNews(arguments.csLblNews);
+    setCsLblNursing(arguments.csLblNursing);
+    setCsLblPenfield(arguments.csLblPenfield);
+    setCsLblPharmacy(arguments.csLblPharmacy);
+    setCsLblTheology(arguments.csLblTheology);
+    setCsLblWorkingAdultPrograms(arguments.csLblWorkingAdultPrograms);
+    setCsShowInBusinessNews(arguments.csShowInBusinessNews);
+    setCsShowInCHPNews(arguments.csShowInCHPNews);
+    setCsShowInEducationNews(arguments.csShowInEducationNews);
+    setCsShowInEngineeringNews(arguments.csShowInEngineeringNews);
+    setCsShowInLawNews(arguments.csShowInLawNews);
+    setCsShowInLiberalArtsNews(arguments.csShowInLiberalArtsNews);
+    setCsShowInMedicineNews(arguments.csShowInMedicineNews);
+    setCsShowInMusicNews(arguments.csShowInMusicNews);
+    setCsShowInNursingNews(arguments.csShowInNursingNews);
+    setCsShowInPenfieldNews(arguments.csShowInPenfieldNews);
+    setCsShowInPharmacyNews(arguments.csShowInPharmacyNews);
+    setCsShowInTheologyNews(arguments.csShowInTheologyNews);
+    setCsShowInWorkingAdultProgramsNews(arguments.csShowInWorkingAdultProgramsNews);
+    setCsShowOnBusinessHomepage(arguments.csShowOnBusinessHomepage);
+    setCsShowOnCHPHomepage(arguments.csShowOnCHPHomepage);
+    setCsShowOnEducationHomepage(arguments.csShowOnEducationHomepage);
+    setCsShowOnEngineeringHomepage(arguments.csShowOnEngineeringHomepage);
+    setCsShowOnLawHomepage(arguments.csShowOnLawHomepage);
+    setCsShowOnLiberalArtsHomepage(arguments.csShowOnLiberalArtsHomepage);
+    setCsShowOnMedicineHomepage(arguments.csShowOnMedicineHomepage);
+    setCsShowOnMusicHomepage(arguments.csShowOnMusicHomepage);
+    setCsShowOnNewsHomepage(arguments.csShowOnNewsHomepage);
+    setCsShowOnNursingHomepage(arguments.csShowOnNursingHomepage);
+    setCsShowOnPenfieldHomepage(arguments.csShowOnPenfieldHomepage);
+    setCsShowOnPharmacyHomepage(arguments.csShowOnPharmacyHomepage);
+    setCsShowOnTheologyHomepage(arguments.csShowOnTheologyHomepage);
+    setCsShowOnUniversityHomepage(arguments.csShowOnUniversityHomepage);
+    setCsShowOnWorkingAdultProgramsHomepage(arguments.csShowOnWorkingAdultProgramsHomepage);
+    setCsSummary(arguments.csSummary);
+    setCsSummaryHeaderPhoto(arguments.csSummaryHeaderPhoto);
+    setCsTitle(arguments.csTitle);
+
     return this;
   }
 
@@ -101,52 +197,140 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  public string function getContent(boolean isForExport = false) {
-    if (! isForExport) {
-      return VARIABLES.content;
-    }
+  // public string function getSummaryHeaderPhoto(boolean isForExport = false) {
+  //   if (! isForExport) {
+  //     return VARIABLES.summaryHeaderPhoto;
+  //   }
 
-    // writeDump(VARIABLES.contentHTMLFragment);
-    return VARIABLES.getContentHTMLFragment(true).getHTML();
+  //   if (0 == Len(VARIABLES.summaryHeaderPhoto)) {
+  //     return '';
+  //   }
+
+  //   var deciphered = Application.ADF.csData.decipherCPImage(VARIABLES.summaryHeaderPhoto);
+
+  //   // WriteDump(deciphered);
+
+  //   return deciphered.resolvedURL.absolute;
+  // }
+
+  /*
+   * getTitle
+   */
+  public string function getTitle() {
+    return VARIABLES.csTitle;
   }
 
-  public any function getContentHTMLFragment(boolean isForExport = false) {
-    if (! isForExport) {
-      return VARIABLES.contentHTMLFragment;
-    }
-
-    var tmp = VARIABLES.contentHTMLFragment;
-    var tmpDoc = tmp.importable().getDocument();
-    tmpDoc = cleanDocument(tmpDoc);
-    tmp.setDocument(tmpDoc);
-
-    return tmp;
+  /*
+   * getContent
+   */
+  public string function getContent() {
+    var content = VARIABLES.csContent;
+    content = deMoronize(content);
+    var document = jSoup.parseBodyFragment(content);
+    // content = fix
+    content = document.body().html();
+    return content;
   }
 
-  public string function getSummaryHeaderPhoto(boolean isForExport = false) {
-    if (! isForExport) {
-      return VARIABLES.summaryHeaderPhoto;
-    }
-
-    if (0 == Len(VARIABLES.summaryHeaderPhoto)) {
-      return '';
-    }
-
-    var deciphered = Application.ADF.csData.decipherCPImage(VARIABLES.summaryHeaderPhoto);
-
-    // WriteDump(deciphered);
-
-    return deciphered.resolvedURL.absolute;
+  /*
+   * getExcerpt
+   */
+  public string function getExcerpt() {
+    return VARIABLES.csSummary;
   }
 
-  public void function setContent(required string content) {
-    VARIABLES.content = ARGUMENTS.content;
-    VARIABLES.contentHTMLFragment = new HTMLFragment(ARGUMENTS.content);
+  /*
+   * getImages
+   */
+  public string function getImages() {
+    var images = '';
+    images = extractImageURLs(getCsContent());
+    // DEBUG: Before images are processed
+    // writeOutput('<div>[#images#]</div>');
+    images = fullyQualifyURLList(images);
+    // DEBUG: After images are processed
+    // writeOutput('<div>(#images#)</div>');
+    return images;
   }
 
-  public void function setContentHTMLFragment(required component contentHTMLFragment) {
-    VARIABLES.contentHTMLFragment = ARGUMENTS.contentHTMLFragment;
-    VARIABLES.content = contentHTMLFragment.getHTML();
+  /*
+   * getCategories
+   */
+  public string function getCategories() {
+    var categories = arrayNew(1);
+
+    if (isTruthy(getCsShowInBusinessNews()) || isTruthy(getCsShowOnBusinessHomepage())) {
+      ArrayAppend(categories, 'Business & Economics');
+    }
+    if (isTruthy(getCsShowInCHPNews()) || isTruthy(getCsShowOnCHPHomepage())) {
+      ArrayAppend(categories, 'Health Professions');
+    }
+    if (isTruthy(getCsShowInEducationNews()) || isTruthy(getCsShowOnEducationHomepage())) {
+      ArrayAppend(categories, 'Education');
+    }
+    if (isTruthy(getCsShowInEngineeringNews()) || isTruthy(getCsShowOnEngineeringHomepage())) {
+      ArrayAppend(categories, 'Engineering');
+    }
+    if (isTruthy(getCsShowInLawNews()) || isTruthy(getCsShowOnLawHomepage())) {
+      ArrayAppend(categories, 'Law');
+    }
+    if (isTruthy(getCsShowInLiberalArtsNews()) || isTruthy(getCsShowOnLiberalArtsHomepage())) {
+      ArrayAppend(categories, 'Liberal Arts');
+    }
+    if (isTruthy(getCsShowInMedicineNews()) || isTruthy(getCsShowOnMedicineHomepage())) {
+      ArrayAppend(categories, 'Medicine');
+    }
+    if (isTruthy(getCsShowInMusicNews()) || isTruthy(getCsShowOnMusicHomepage())) {
+      ArrayAppend(categories, 'Music');
+    }
+    if (isTruthy(getCsShowInNursingNews()) || isTruthy(getCsShowOnNursingHomepage())) {
+      ArrayAppend(categories, 'Nursing');
+    }
+    if (isTruthy(getCsShowInPenfieldNews()) || isTruthy(getCsShowOnPenfieldHomepage())) {
+      ArrayAppend(categories, 'Penfield');
+    }
+    if (isTruthy(getCsShowInPharmacyNews()) || isTruthy(getCsShowOnPharmacyHomepage())) {
+      ArrayAppend(categories, 'Pharmacy');
+    }
+    if (isTruthy(getCsShowInTheologyNews()) || isTruthy(getCsShowOnTheologyHomepage())) {
+      ArrayAppend(categories, 'Theology');
+    }
+    if (isTruthy(getCsShowInWorkingAdultProgramsNews()) || isTruthy(getCsShowOnWorkingAdultProgramsHomepage())) {
+      ArrayAppend(categories, 'Working Adults');
+    }
+
+    return arrayToList(categories);
+  }
+
+  /*
+   * No tags are being exports so far as I know
+   */
+  public string function getTags() {
+    var tags = '';
+    return tags;
+  }
+
+  /*
+   * getPostDate
+   */
+  public string function getPostDate() {
+    var date = getCsDatePublished();
+    date = dateFormat(date, 'yyyy-mm-dd');
+    return date;
+  }
+
+  /*
+   * getPostSlug
+   */
+  public string function getPostSlug() {
+    return '';
+  }
+
+  /*
+   * getPostAuthor
+   */
+  public string function getPostAuthor() {
+    return '';
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -159,165 +343,29 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  // public string function importableContent() {
-  //   return new HTMLFragment(getContent()).importableHTML();
-  // }
-
-  public component function images () {
-    return getContentHTMLFragment().images();
-  }
-
-  public component function links () {
-    return getContentHTMLFragment(true).links();
-  }
-
-  public array function taxonomyArray () {
-    var taxonomy = [];
-
-    if (isTruthy(getShowInBusinessNews()) || isTruthy(getShowOnBusinessHomepage())) {
-      ArrayAppend(taxonomy, 'Business & Economics');
-    }
-    if (isTruthy(getShowInCHPNews()) || isTruthy(getShowOnCHPHomepage())) {
-      ArrayAppend(taxonomy, 'Health Professions');
-    }
-    if (isTruthy(getShowInEducationNews()) || isTruthy(getShowOnEducationHomepage())) {
-      ArrayAppend(taxonomy, 'Education');
-    }
-    if (isTruthy(getShowInEngineeringNews()) || isTruthy(getShowOnEngineeringHomepage())) {
-      ArrayAppend(taxonomy, 'Engineering');
-    }
-    if (isTruthy(getShowInLawNews()) || isTruthy(getShowOnLawHomepage())) {
-      ArrayAppend(taxonomy, 'Law');
-    }
-    if (isTruthy(getShowInLiberalArtsNews()) || isTruthy(getShowOnLiberalArtsHomepage())) {
-      ArrayAppend(taxonomy, 'Liberal Arts');
-    }
-    if (isTruthy(getShowInMedicineNews()) || isTruthy(getShowOnMedicineHomepage())) {
-      ArrayAppend(taxonomy, 'Medicine');
-    }
-    if (isTruthy(getShowInMusicNews()) || isTruthy(getShowOnMusicHomepage())) {
-      ArrayAppend(taxonomy, 'Music');
-    }
-    if (isTruthy(getShowInNursingNews()) || isTruthy(getShowOnNursingHomepage())) {
-      ArrayAppend(taxonomy, 'Nursing');
-    }
-    if (isTruthy(getShowInPenfieldNews()) || isTruthy(getShowOnPenfieldHomepage())) {
-      ArrayAppend(taxonomy, 'Penfield');
-    }
-    if (isTruthy(getShowInPharmacyNews()) || isTruthy(getShowOnPharmacyHomepage())) {
-      ArrayAppend(taxonomy, 'Pharmacy');
-    }
-    if (isTruthy(getShowInTheologyNews()) || isTruthy(getShowOnTheologyHomepage())) {
-      ArrayAppend(taxonomy, 'Theology');
-    }
-    if (isTruthy(getShowInWorkingAdultProgramsNews()) || isTruthy(getShowOnWorkingAdultProgramsHomepage())) {
-      ArrayAppend(taxonomy, 'Working Adults');
-    }
-
-    return taxonomy;
-  }
-
-  public string function taxonomyList () {
-    return ArrayToList(taxonomyArray());
-  }
-
-  public struct function toStruct (boolean isForExport = false) {
-    if (isForExport) {
-      return toStructForXMLExport();
-    } else {
-      return toStructNotForXMLExport();
-    }
-  }
-
-  // Tarteting the WP All Import plugin
-  public struct function toStructForXMLExport () {
-    var s = {};
-    var images = images().importable().toArray();
-
-    s['PostDate']         = encodeForXML(getDatePublished());
-    s['UniqueIdentifier'] = encodeForXML(getPageID());
-    s['Content']          = encodeForXML(getContent(true));
-    s['Excerpt']          = encodeForXML(getSummary());
-    s['Title']            = encodeForXML(getTitle());
-    s['Tags']             = encodeForXML(taxonomyList());
-    s['Categories']       = encodeForXML('News');
-    // s['Slug']          = '';  // Automatic name is fine
-    s['Author']           = '';
-
-    if (0 < ArrayLen(images)) {
-      // WriteDump(images);
-      images = ArrayMap(images, function(image) {
-        // return image;
-        return image.getUrl();
-      });
-      if (0 < Len(getSummaryHeaderPhoto(true))) {
-        ArrayPrepend(images, getSummaryHeaderPhoto(true));
-      }
-      s['Images'] = images;
-    }
-
-    return s;
-  }
-
-  public struct function toStructNotForXMLExport () {
+  /*
+   * This facilitites the use the Underscore.cfc XML export feature.
+   * Not everything is HTML encdoded because of how WordPress and WPAllImport work
+   */
+  public struct function toStructForExport (boolean isEncodedForHTML = true) {
     var s = {};
 
-    // Standard custom element data
-    s['pageID']   = getPageID();
-    s['formID']   = getFormID();
-    s['formName'] = getFormName();
+    s['title']       = getTitle();
+    s['content']     = getContent();
+    s['excerpt']     = getExcerpt();
+    s['images']      = getImages();
+    s['cs_page_id']  = getCsPageID();
+    s['categories']  = getCategories();
+    s['tags']        = getTags();
+    s['post_date']   = getPostDate();
+    s['post_slug']   = getPostSlug();
+    s['post_author'] = getPostAuthor();
 
-    // Custom elemement fields
-    s['considerForUniversityHomepage']      = getConsiderForUniversityHomepage();
-    s['contactEmail']                       = getContactEmail();
-    s['contactName']                        = getContactName();
-    s['contactPhone']                       = getContactPhone();
-    s['content']                            = getContent();
-    s['datePublished']                      = getDatePublished();
-    s['lblBusiness']                        = getLblBusiness();
-    s['lblEducation']                       = getLblEducation();
-    s['lblEngineering']                     = getLblEngineering();
-    s['lblLaw']                             = getLblLaw();
-    s['lblLiberalArts']                     = getLblLiberalArts();
-    s['lblMedicine']                        = getLblMedicine();
-    s['lblMercerUniversity']                = getLblMercerUniversity();
-    s['lblMusic']                           = getLblMusic();
-    s['lblNews']                            = getLblNews();
-    s['lblNursing']                         = getLblNursing();
-    s['lblPenfield']                        = getLblPenfield();
-    s['lblTheology']                        = getLblTheology();
-    s['lblWorkingAdultPrograms']            = getLblWorkingAdultPrograms();
-    s['showInBusinessNews']                 = getShowInBusinessNews();
-    s['showInCHPNews']                      = getShowInCHPNews();
-    s['showInEducationNews']                = getShowInEducationNews();
-    s['showInEngineeringNews']              = getShowInEngineeringNews();
-    s['showInLawNews']                      = getShowInLawNews();
-    s['showInLiberalArtsNews']              = getShowInLiberalArtsNews();
-    s['showInMedicineNews']                 = getShowInMedicineNews();
-    s['showInMusicNews']                    = getShowInMusicNews();
-    s['showInNursingNews']                  = getShowInNursingNews();
-    s['showInPenfieldNews']                 = getShowInPenfieldNews();
-    s['showInPharmacyNews']                 = getShowInPharmacyNews();
-    s['showInTheologyNews']                 = getShowInTheologyNews();
-    s['showInWorkingAdultProgramsNews']     = getShowInWorkingAdultProgramsNews();
-    s['showOnBusinessHomepage']             = getShowOnBusinessHomepage();
-    s['showOnCHPHomepage']                  = getShowOnCHPHomepage();
-    s['showOnEducationHomepage']            = getShowOnEducationHomepage();
-    s['showOnEngineeringHomepage']          = getShowOnEngineeringHomepage();
-    s['showOnLawHomepage']                  = getShowOnLawHomepage();
-    s['showOnLiberalArtsHomepage']          = getShowOnLiberalArtsHomepage();
-    s['showOnMedicineHomepage']             = getShowOnMedicineHomepage();
-    s['showOnMusicHomepage']                = getShowOnMusicHomepage();
-    s['showOnNewsHomepage']                 = getShowOnNewsHomepage();
-    s['showOnNursingHomepage']              = getShowOnNursingHomepage();
-    s['showOnPenfieldHomepage']             = getShowOnPenfieldHomepage();
-    s['showOnPharmacyHomepage']             = getShowOnPharmacyHomepage();
-    s['showOnTheologyHomepage']             = getShowOnTheologyHomepage();
-    s['showOnUniversityHomepage']           = getShowOnUniversityHomepage();
-    s['showOnWorkingAdultProgramsHomepage'] = getShowOnWorkingAdultProgramsHomepage();
-    s['summary']                            = getSummary();
-    s['summaryHeaderPhoto']                 = getSummaryHeaderPhoto();
-    s['title']                              = getTitle();
+    if (isEncodedForHTML) {
+      s['title']   = encodeForHTML(s['title']);
+      s['content'] = encodeForHTML(s['content']);
+      s['excerpt'] = encodeForHTML(s['excerpt']);
+    }
 
     return s;
   }
@@ -332,16 +380,106 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
-  private any function cleanDocument(required any document) {
-    var tmpDoc = document;
-
-    tmpDoc = removeMediaContact(tmpDoc);
-
-    return tmpDoc;
+  private string function extractImageURLs(required string corpus) {
+    var urls = arrayNew(1);
+    var dom = VARIABLES.jSoup.parseBodyFragment(corpus);
+    ArrayEach(dom.select('img'), function(i) {
+      var url = i.attr('src');
+      arrayAppend(urls, url);
+    });
+    return arrayToList(urls);
   }
 
-  private any function removeMediaContact (required any document) {
-    var tmpDoc = document;
+  private boolean function isURLAbsolute (required string url) {
+    return 1 == REFindNoCase('^[a-z][a-z0-9+.-]*:', url);
+  }
+
+  private boolean function isURLProtocolRelative (required string url) {
+    return 1 < Len(url) && '//' == Left(url, 2);
+  }
+
+  private boolean function isURLRootRelative(required string url) {
+    return 1 == Len(url) && '/' == Left(url, 1) || 1 < Len(url) && '/' != Mid(url, 2, 1);
+  }
+
+  private string function fullyQualifyURLList(required string urlList) {
+    var fqURLList = '';
+    listEach(urlList, function(url) {
+      var fqURL = fullyQualifyURL(url);
+      // writeOutput('<div>#fqURL#</div>');
+      fqURLList = ListAppend(fqURLList, fqURL);
+    });
+    return fqURLList;
+  }
+
+  private string function fullyQualifyURL (required string url) {
+    var absoluteURL = '';
+
+    if (isURLAbsolute(url)) {
+      absoluteURL &= url;
+    } else if (isURLProtocolRelative(url)) {
+      absoluteURL &= 'http:#url#';
+    } else if (isURLRootRelative(url)) {
+      absoluteURL &= 'http://';
+      absoluteURL &= domainFromRootRelativeURL(url);
+      absoluteURL &= stripDomainDirectoryFromURL(url);
+    }
+
+    return absoluteURL;
+  }
+
+  /*
+   * This isn't necessary for urls to work
+   * But it should help with 404s
+   */
+  private string function domainFromRootRelativeURL (url) {
+    var domain = '';
+    var results = REFindNoCase('(com|mu|tv)-([^/]+)', url, 1, true);
+    var match = '';
+    var prefix = '';
+    var siteName = '';
+
+    if (IsStruct(results) && 3 == ArrayLen(results.pos)) {
+      match = Mid(url, results.pos[1], results.len[1]);
+      prefix = Mid(url, results.pos[2], results.len[2]);
+      siteName = Mid(url, results.pos[3], results.len[3]);
+    }
+
+    // WriteOutput('<div>Match #match#</div>');
+    // WriteOutput('<div>Prefix #prefix#</div>');
+    // WriteOutput('<div>Site Name #siteName#</div>');
+
+    if ('com' == prefix) {
+      domain = '#siteName#.com';
+    } else if ('mu' == prefix) {
+      domain = '#siteName#.mercer.edu';
+    } else if ('tv' == prefix) {
+      domain = '#siteName#.tv';
+    } else {
+      domain = 'www.mercer.edu';
+    }
+
+    return domain;
+  }
+
+  /*
+   * This isn't necessary for images, but it does make regular links more useful
+   */
+  private string function stripDomainDirectoryFromURL (url) {
+    var tmpURL = '';
+    var regex = '';
+    regex &= request.site.CP_URL;
+    regex &= '(?:com|mu|tv)-(?:[^/]+)';
+    // WriteDump(regex);
+    var matches = REMatchNoCase(regex, url);
+    // WriteDump(var = matches, label = 'stripDomainDirectoryFromURL directory');
+    if (IsArray(matches) && 1 == ArrayLen(matches)) {
+      tmpURL = Replace(url, matches[1], '');
+    }
+    return tmpURL;
+  }
+
+  private string function removeMediaContact (required string corpus) {
     var regexMediaContact = '';
 
     regexMediaContact &= '\s*';
@@ -356,8 +494,8 @@ component accessors=true output=false persistent=false {
         element.remove();
       }
     });
-
-    return tmpDoc;
+    // VARIABLES.document.body().html();
+    return corpus;
   }
 
   private boolean function isTruthy(v) {
@@ -383,226 +521,102 @@ component accessors=true output=false persistent=false {
     return true;
   }
 
-  private void function setFromStruct (required struct s) {
-    // Standard custom element data
-    if (StructKeyExists(s, 'pageID')) {
-      setPageID(s.pageID);
+  /*
+    This library is part of the Common Function Library Project. An open source
+    collection of UDF libraries designed for ColdFusion 5.0 and higher. For more information,
+    please see the web site at:
+
+      http://www.cflib.org
+
+    Warning:
+    You may not need all the functions in this library. If speed
+    is _extremely_ important, you may want to consider deleting
+    functions you do not plan on using. Normally you should not
+    have to worry about the size of the library.
+
+    License:
+    This code may be used freely.
+    You may modify this code as you see fit, however, this header, and the header
+    for the functions must remain intact.
+
+    This code is provided as is.  We make no warranty or guarantee.  Use of this code is at your own risk.
+  */
+  /**
+   * Fixes text using Microsoft Latin-1 &quot;Extentions&quot;, namely ASCII characters 128-160.
+   * ASCII8217 mod by Tony Brandner
+   *
+   * @param text    Text to be modified. (Required)
+   * @return Returns a string.
+   * @author Shawn Porter (sporter@rit.net)
+   * @version 2, September 2, 2010
+   */
+  private string function deMoronize (text) {
+    var i = 0;
+
+    // map incompatible non-ISO characters into plausible
+    // substitutes
+    text = Replace(text, Chr(128), "&euro;", "All");
+
+    text = Replace(text, Chr(130), ",", "All");
+    text = Replace(text, Chr(131), "<em>f</em>", "All");
+    text = Replace(text, Chr(132), ",,", "All");
+    text = Replace(text, Chr(133), "...", "All");
+
+    text = Replace(text, Chr(136), "^", "All");
+
+    text = Replace(text, Chr(139), ")", "All");
+    text = Replace(text, Chr(140), "Oe", "All");
+
+    text = Replace(text, Chr(145), "`", "All");
+    text = Replace(text, Chr(146), "'", "All");
+    text = Replace(text, Chr(147), """", "All");
+    text = Replace(text, Chr(148), """", "All");
+    text = Replace(text, Chr(149), "*", "All");
+    text = Replace(text, Chr(150), "-", "All");
+    text = Replace(text, Chr(151), "--", "All");
+    text = Replace(text, Chr(152), "~", "All");
+    text = Replace(text, Chr(153), "&trade;", "All");
+
+    text = Replace(text, Chr(155), ")", "All");
+    text = Replace(text, Chr(156), "oe", "All");
+
+    // remove any remaining ASCII 128-159 characters
+    for (i = 128; i LTE 159; i = i + 1) {
+      text = Replace(text, Chr(i), "", "All");
     }
-    if (StructKeyExists(s, 'formID')) {
-      setFormID(s.formID);
+
+    // map Latin-1 supplemental characters into
+    // their &name; encoded substitutes
+    text = Replace(text, Chr(160), "&nbsp;", "All");
+
+    text = Replace(text, Chr(163), "&pound;", "All");
+
+    text = Replace(text, Chr(169), "&copy;", "All");
+
+    text = Replace(text, Chr(176), "&deg;", "All");
+
+    // encode ASCII 160-255 using ? format
+    for (i = 160; i LTE 255; i = i + 1) {
+      text = REReplace(text, "(#Chr(i)#)", "&###i#;", "All");
     }
-    if (StructKeyExists(s, 'formName')) {
-      setFormName(s.formName);
+
+    for (i = 8216; i LTE 8218; i = i + 1) {
+      text = Replace(text, Chr(i), "'", "All");
     }
-    // Custom element fields
-    if (StructKeyExists(s, 'considerForUniversityHomepage')) {
-      if (IsNumeric(s.considerForUniversityHomepage)) {
-        setConsiderForUniversityHomepage(s.considerForUniversityHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'contactEmail')) {
-      setContactEmail(s.contactEmail);
-    }
-    if (StructKeyExists(s, 'contactName')) {
-      setContactName(s.contactName);
-    }
-    if (StructKeyExists(s, 'contactPhone')) {
-      setContactPhone(s.contactPhone);
-    }
-    if (StructKeyExists(s, 'content')) {
-      setContent(s.content);
-    }
-    if (StructKeyExists(s, 'datePublished')) {
-      setDatePublished(s.datePublished);
-    }
-    if (StructKeyExists(s, 'lblBusiness')) {
-      setLblBusiness(s.lblBusiness);
-    }
-    if (StructKeyExists(s, 'lblEducation')) {
-      setLblEducation(s.lblEducation);
-    }
-    if (StructKeyExists(s, 'lblEngineering')) {
-      setLblEngineering(s.lblEngineering);
-    }
-    if (StructKeyExists(s, 'lblLaw')) {
-      setLblLaw(s.lblLaw);
-    }
-    if (StructKeyExists(s, 'lblLiberalArts')) {
-      setLblLiberalArts(s.lblLiberalArts);
-    }
-    if (StructKeyExists(s, 'lblMedicine')) {
-      setLblMedicine(s.lblMedicine);
-    }
-    if (StructKeyExists(s, 'lblMercerUniversity')) {
-      setLblMercerUniversity(s.lblMercerUniversity);
-    }
-    if (StructKeyExists(s, 'lblMusic')) {
-      setlblMusic(s.lblMusic);
-    }
-    if (StructKeyExists(s, 'lblNews')) {
-      setLblNews(s.lblNews);
-    }
-    if (StructKeyExists(s, 'lblNursing')) {
-      setLblNursing(s.lblNursing);
-    }
-    if (StructKeyExists(s, 'lblPenfield')) {
-      setLblPenfield(s.lblPenfield);
-    }
-    if (StructKeyExists(s, 'lblTheology')) {
-      setLblTheology(s.lblTheology);
-    }
-    if (StructKeyExists(s, 'lblWorkingAdultPrograms')) {
-      setLblWorkingAdultPrograms(s.lblWorkingAdultPrograms);
-    }
-    if (StructKeyExists(s, 'showInBusinessNews')) {
-      if (IsNumeric(s.showInBusinessNews)) {
-        setShowInBusinessNews(s.showInBusinessNews);
-      }
-    }
-    if (StructKeyExists(s, 'showInCHPNews')) {
-      if (IsNumeric(s.showInCHPNews)) {
-        setShowInCHPNews(s.showInCHPNews);
-      }
-    }
-    if (StructKeyExists(s, 'showInEducationNews')) {
-      if (IsNumeric(s.showInEducationNews)) {
-        setShowInEducationNews(s.showInEducationNews);
-      }
-    }
-    if (StructKeyExists(s, 'showInEngineeringNews')) {
-      if (IsNumeric(s.showInEngineeringNews)) {
-        setShowInEngineeringNews(s.showInEngineeringNews);
-      }
-    }
-    if (StructKeyExists(s, 'showInLawNews')) {
-      if (IsNumeric(s.showInLawNews)) {
-        setShowInLawNews(s.showInLawNews);
-      }
-    }
-    if (StructKeyExists(s, 'showInLiberalArtsNews')) {
-      if (IsNumeric(s.showInLiberalArtsNews)) {
-        setShowInLiberalArtsNews(s.showInLiberalArtsNews);
-      }
-    }
-    if (StructKeyExists(s, 'showInMedicineNews')) {
-      if (IsNumeric(s.showInMedicineNews)) {
-        setShowInMedicineNews(s.showInMedicineNews);
-      }
-    }
-    if (StructKeyExists(s, 'showInMusicNews')) {
-      if (IsNumeric(s.showInMusicNews)) {
-        setShowInMusicNews(s.showInMusicNews);
-      }
-    }
-    if (StructKeyExists(s, 'showInNursingNews')) {
-      if (IsNumeric(s.showInNursingNews)) {
-        setShowInNursingNews(s.showInNursingNews);
-      }
-    }
-    if (StructKeyExists(s, 'showInPenfieldNews')) {
-      if (IsNumeric(s.showInPenfieldNews)) {
-        setShowInPenfieldNews(s.showInPenfieldNews);
-      }
-    }
-    if (StructKeyExists(s, 'showInPharmacyNews')) {
-      if (IsNumeric(s.showInPharmacyNews)) {
-        setShowInPharmacyNews(s.showInPharmacyNews);
-      }
-    }
-    if (StructKeyExists(s, 'showInTheologyNews')) {
-      if (IsNumeric(s.showInTheologyNews)) {
-        setShowInTheologyNews(s.showInTheologyNews);
-      }
-    }
-    if (StructKeyExists(s, 'showInWorkingAdultProgramsNews')) {
-      if (IsNumeric(s.showInWorkingAdultProgramsNews)) {
-        setShowInWorkingAdultProgramsNews(s.showInWorkingAdultProgramsNews);
-      }
-    }
-    if (StructKeyExists(s, 'showOnBusinessHomepage')) {
-      if (IsNumeric(s.showOnBusinessHomepage)) {
-        setShowOnBusinessHomepage(s.showOnBusinessHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnCHPHomepage')) {
-      if (IsNumeric(s.showOnCHPHomepage)) {
-        setShowOnCHPHomepage(s.showOnCHPHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnEducationHomepage')) {
-      if (IsNumeric(s.showOnEducationHomepage)) {
-        setShowOnEducationHomepage(s.showOnEducationHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnEngineeringHomepage')) {
-      if (IsNumeric(s.showOnEngineeringHomepage)) {
-        setShowOnEngineeringHomepage(s.showOnEngineeringHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnLawHomepage')) {
-      if (IsNumeric(s.showOnLawHomepage)) {
-        setShowOnLawHomepage(s.showOnLawHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnLiberalArtsHomepage')) {
-      if (IsNumeric(s.showOnLiberalArtsHomepage)) {
-        setShowOnLiberalArtsHomepage(s.showOnLiberalArtsHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnMedicineHomepage')) {
-      if (IsNumeric(s.showOnMedicineHomepage)) {
-        setShowOnMedicineHomepage(s.showOnMedicineHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnMusicHomepage')) {
-      if (IsNumeric(s.showOnMusicHomepage)) {
-        setShowOnMusicHomepage(s.showOnMusicHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnNewsHomepage')) {
-      if (IsNumeric(s.showOnNewsHomepage)) {
-        setShowOnNewsHomepage(s.showOnNewsHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnNursingHomepage')) {
-      if (IsNumeric(s.showOnNursingHomepage)) {
-        setShowOnNursingHomepage(s.showOnNursingHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnPenfieldHomepage')) {
-      if (IsNumeric(s.showOnPenfieldHomepage)) {
-        setShowOnPenfieldHomepage(s.showOnPenfieldHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnPharmacyHomepage')) {
-      if (IsNumeric(s.showOnPharmacyHomepage)) {
-        setShowOnPharmacyHomepage(s.showOnPharmacyHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnTheologyHomepage')) {
-      if (IsNumeric(s.showOnTheologyHomepage)) {
-        setShowOnTheologyHomepage(s.showOnTheologyHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnUniversityHomepage')) {
-      if (IsNumeric(s.showOnUniversityHomepage)) {
-        setShowOnUniversityHomepage(s.showOnUniversityHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'showOnWorkingAdultProgramsHomepage')) {
-      if (IsNumeric(s.showOnWorkingAdultProgramsHomepage)) {
-        setShowOnWorkingAdultProgramsHomepage(s.showOnWorkingAdultProgramsHomepage);
-      }
-    }
-    if (StructKeyExists(s, 'summary')) {
-      setSummary(s.summary);
-    }
-    if (StructKeyExists(s, 'summaryHeaderPhoto')) {
-      setSummaryHeaderPhoto(s.summaryHeaderPhoto);
-    }
-    if (StructKeyExists(s, 'title')) {
-      setTitle(s.title);
-    }
+
+    // supply missing semicolon at end of numeric entities
+    text = ReReplace(text, "&##([0-2][[:digit:]]{2})([^;])", "&##\1;\2", "All");
+
+    // fix obscure numeric rendering of &lt; &gt; &amp;
+    text = ReReplace(text, "&##038;", "&amp;", "All");
+    text = ReReplace(text, "&##060;", "&lt;", "All");
+    text = ReReplace(text, "&##062;", "&gt;", "All");
+
+    // supply missing semicolon at the end of &amp; &quot;
+    text = ReReplace(text, "&amp(^;)", "&amp;\1", "All");
+    text = ReReplace(text, "&quot(^;)", "&quot;\1", "All");
+
+    return text;
   }
 
 }

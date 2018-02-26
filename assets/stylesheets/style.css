@@ -1,6 +1,8 @@
-/*
- * Author: Todd Sayre
- * Created: 2018-02-21 9:11 AM
+/**
+ * style.less
+ *
+ * @author Todd Sayre
+ * @date 2018-02-21 9:11 AM
  */
 .DataTable {
   border-collapse: collapse;
@@ -16,4 +18,23 @@
 .DataTable th {
   border-bottom: 1px solid darkgrey;
   border-right: 1px solid darkgrey;
+}
+.PreviewArticles * {
+  margin-bottom: 1rem;
+}
+.PreviewArticle {
+  border-right: 1px solid darkgrey;
+  border-top: 1px solid darkgrey;
+  -webkit-margin-collapse: collapse;
+}
+.PreviewArticle:nth-child(odd) {
+  background-color: peachpuff;
+}
+.PreviewArticle:nth-child(even) {
+  background-color: aquamarine;
+}
+.PreviewArticle td,
+.PreviewArticle th {
+  border-bottom: 1px solid darkgrey;
+  border-left: 1px solid darkgrey;
 }

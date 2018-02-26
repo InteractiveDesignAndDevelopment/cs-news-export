@@ -9,8 +9,6 @@ component accessors=true output=false persistent=false {
 
   _ = new Underscore();
   articles = [];
-  // capiCustomElement = Server.CommonSpot.api.getObject('CustomElement');
-  // id = customElementID();
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -44,7 +42,8 @@ component accessors=true output=false persistent=false {
 
   public component function all () {
     var ceData = application.adf.ceData.getCEData('News Article');
-    ceData = ArraySlice(ceData, ArrayLen(ceData) - 10, 10);
+    // DEBUG: Just get the first 10 articles
+    ceData = ArraySlice(ceData, ArrayLen(ceData) - 50, 50);
     articles = ceDataToArticlesArray(ceData);
     return this;
   }
@@ -94,7 +93,63 @@ component accessors=true output=false persistent=false {
 
   private any function ceDataToArticlesArray (ceData) {
     ceData = ArrayMap(ceData, function(ceDatum) {
-      return new NewsArticle(ceDatum);
+      // writeDump(ceDatum);
+      var values = ceDatum.values;
+      return new NewsArticle(
+        csPageID                             = ceDatum.pageID,
+        csConsiderForUniversityHomepage      = values.considerForUniversityHomepage,
+        csContactEmail                       = values.contactEmail,
+        csContactName                        = values.contactName,
+        csContactPhone                       = values.contactPhone,
+        csContent                            = values.content,
+        csDatePublished                      = values.datePublished,
+        csLblBusiness                        = values.lblBusiness,
+        csLblCHP                             = values.lblCHP,
+        csLblEducation                       = values.lblEducation,
+        csLblEngineering                     = values.lblEngineering,
+        csLblLaw                             = values.lblLaw,
+        csLblLiberalArts                     = values.lblLiberalArts,
+        csLblMedicine                        = values.lblMedicine,
+        csLblMercerUniversity                = values.lblMercerUniversity,
+        csLblMusic                           = values.lblMusic,
+        csLblNews                            = values.lblNews,
+        csLblNursing                         = values.lblNursing,
+        csLblPenfield                        = values.lblPenfield,
+        csLblPharmacy                        = values.lblPharmacy,
+        csLblTheology                        = values.lblTheology,
+        csLblWorkingAdultPrograms            = values.lblWorkingAdultPrograms,
+        csShowInBusinessNews                 = values.showInBusinessNews,
+        csShowInCHPNews                      = values.showInCHPNews,
+        csShowInEducationNews                = values.showInEducationNews,
+        csShowInEngineeringNews              = values.showInEngineeringNews,
+        csShowInLawNews                      = values.showInLawNews,
+        csShowInLiberalArtsNews              = values.showInLiberalArtsNews,
+        csShowInMedicineNews                 = values.showInMedicineNews,
+        csShowInMusicNews                    = values.showInMusicNews,
+        csShowInNursingNews                  = values.showInNursingNews,
+        csShowInPenfieldNews                 = values.showInPenfieldNews,
+        csShowInPharmacyNews                 = values.showInPharmacyNews,
+        csShowInTheologyNews                 = values.showInTheologyNews,
+        csShowInWorkingAdultProgramsNews     = values.showInWorkingAdultProgramsNews,
+        csShowOnBusinessHomepage             = values.showOnBusinessHomepage,
+        csShowOnCHPHomepage                  = values.showOnCHPHomepage,
+        csShowOnEducationHomepage            = values.showOnEducationHomepage,
+        csShowOnEngineeringHomepage          = values.showOnEngineeringHomepage,
+        csShowOnLawHomepage                  = values.showOnLawHomepage,
+        csShowOnLiberalArtsHomepage          = values.showOnLiberalArtsHomepage,
+        csShowOnMedicineHomepage             = values.showOnMedicineHomepage,
+        csShowOnMusicHomepage                = values.showOnMusicHomepage,
+        csShowOnNewsHomepage                 = values.showOnNewsHomepage,
+        csShowOnNursingHomepage              = values.showOnNursingHomepage,
+        csShowOnPenfieldHomepage             = values.showOnPenfieldHomepage,
+        csShowOnPharmacyHomepage             = values.showOnPharmacyHomepage,
+        csShowOnTheologyHomepage             = values.showOnTheologyHomepage,
+        csShowOnUniversityHomepage           = values.showOnUniversityHomepage,
+        csShowOnWorkingAdultProgramsHomepage = values.showOnWorkingAdultProgramsHomepage,
+        csSummary                            = values.summary,
+        csSummaryHeaderPhoto                 = values.summaryHeaderPhoto,
+        csTitle                              = values.title
+      );
     });
     return ceData;
   }
