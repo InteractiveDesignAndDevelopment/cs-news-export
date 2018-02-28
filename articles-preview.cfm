@@ -1,8 +1,13 @@
 <cfscript>
 
+  /*
+   * Examples to test with
+   * - Empty paragraphs: 338731
+   */
+
   LOCAL.articles = new components.NewsArticles().all();
-  // WriteDump(LOCAL.articles.toArray());
-  // LOCAL.articles = new components.NewsArticles(113692);
+  // LOCAL.articles = new components.NewsArticles().findByPageID(338731);
+
   LOCAL.articlesArray = LOCAL.articles.toArray();
 
 </cfscript><cfoutput><!doctype html>
@@ -26,18 +31,30 @@
           </tr>
           <tr>
             <th>Title</th>
-            <td><pre><code>#htmlCodeFormat(article.getCsTitle())#</pre></code></td>
-            <td><pre><code>#htmlCodeFormat(article.getTitle())#</pre></code></td>
+            <td>#encodeForXML(article.getCsTitle())#</td>
+            <td>#encodeForXML(article.getTitle())#</td>
           </tr>
           <tr>
             <th>Content</th>
-            <td><pre><code>#htmlCodeFormat(article.getCsContent())#</pre></code></td>
-            <td><pre><code>#htmlCodeFormat(article.getContent())#</pre></code></td>
+            <td>#encodeForXML(article.getCsContent())#</td>
+            <td>#encodeForXML(article.getContent())#</td>
           </tr>
           <tr>
             <th>Excerpt</th>
-            <td><pre><code>#htmlCodeFormat(article.getCsSummary())#</pre></code></td>
-            <td><pre><code>#htmlCodeformat(article.getExcerpt())#</pre></code></td>
+            <td>#encodeForXML(article.getCsSummary())#</td>
+            <td>#encodeForXML(article.getExcerpt())#</td>
+          </tr>
+          <tr>
+            <th>Categories</th>
+            <td colspan="2">#article.getCategories()#</td>
+          </tr>
+          <tr>
+            <th>Tags</th>
+            <td colspan="2">#article.getTags()#</td>
+          </tr>
+          <tr>
+            <th>Images</th>
+            <td colspan="2">#article.getImages()#</td>
           </tr>
         </table>
       </cfloop>

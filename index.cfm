@@ -14,7 +14,7 @@
 
       <ul>
         <li><a href="./authors-preview.cfm">Preview</a></li>
-        <li><a href="./author-export.cfm">Export </a></li>
+        <li><a href="./authors-export.cfm">Export </a></li>
       </ul>
 
       <h2>Articles</h2>

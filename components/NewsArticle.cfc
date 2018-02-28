@@ -201,57 +201,13 @@ component accessors=true output=false persistent=false {
   //   if (! isForExport) {
   //     return VARIABLES.summaryHeaderPhoto;
   //   }
-
   //   if (0 == Len(VARIABLES.summaryHeaderPhoto)) {
   //     return '';
   //   }
-
   //   var deciphered = Application.ADF.csData.decipherCPImage(VARIABLES.summaryHeaderPhoto);
-
   //   // WriteDump(deciphered);
-
   //   return deciphered.resolvedURL.absolute;
   // }
-
-  /*
-   * getTitle
-   */
-  public string function getTitle() {
-    return VARIABLES.csTitle;
-  }
-
-  /*
-   * getContent
-   */
-  public string function getContent() {
-    var content = VARIABLES.csContent;
-    content = deMoronize(content);
-    var document = jSoup.parseBodyFragment(content);
-    // content = fix
-    content = document.body().html();
-    return content;
-  }
-
-  /*
-   * getExcerpt
-   */
-  public string function getExcerpt() {
-    return VARIABLES.csSummary;
-  }
-
-  /*
-   * getImages
-   */
-  public string function getImages() {
-    var images = '';
-    images = extractImageURLs(getCsContent());
-    // DEBUG: Before images are processed
-    // writeOutput('<div>[#images#]</div>');
-    images = fullyQualifyURLList(images);
-    // DEBUG: After images are processed
-    // writeOutput('<div>(#images#)</div>');
-    return images;
-  }
 
   /*
    * getCategories
@@ -299,7 +255,79 @@ component accessors=true output=false persistent=false {
       ArrayAppend(categories, 'Working Adults');
     }
 
+    if (0 == arrayLen(categories)) {
+      arrayAppend(categories, 'General');
+    }
+
     return arrayToList(categories);
+  }
+
+  /*
+   * getContent
+   */
+  public string function getContent() {
+    var content = VARIABLES.csContent;
+    content = deMoronize(content);
+    content = cleanContentHTML(content);
+    var document = jSoup.parseBodyFragment(content);
+    document = fullyQualifyURLsInLinksInDocument(document);
+    document = removeExtraneousLinksFromDocument(document);
+    document = removeEmptyPTagsFromDocument(document);
+    document = stripMediaContactFromDocument(document);
+    // document.OutputSettings().prettyPrint(true);
+    content = document.body().html();
+    return content;
+  }
+
+  /*
+   * getExcerpt
+   */
+  public string function getExcerpt() {
+    return VARIABLES.csSummary;
+  }
+
+  /*
+   * getImages
+   */
+  public string function getImages() {
+    var images = '';
+    var summaryHeaderPhotoURL = '';
+
+    images = extractImageURLs(getCsContent());
+    // DEBUG: Before images are processed
+    // writeOutput('<div>[#images#]</div>');
+
+    images = fullyQualifyURLList(images);
+    // DEBUG: After images are processed
+    // writeOutput('<div>(#images#)</div>');
+
+    // DEBUG: Title images
+    // writeOutput('<div>#getCSSummaryHeaderPhoto()#</div>');
+
+    if (0 < Len(getCSSummaryHeaderPhoto())) {
+      summaryHeaderPhotoURL = application.adf.csData.decipherCPImage(getCSSummaryHeaderPhoto());
+      if (isStruct(summaryHeaderPhotoURL) &&
+        structKeyExists(summaryHeaderPhotoURL, 'RESOLVEDURL') &&
+        isStruct(summaryHeaderPhotoURL['RESOLVEDURL']) &&
+        structKeyExists(summaryHeaderPhotoURL['RESOLVEDURL'], 'ABSOLUTE')) {
+        summaryHeaderPhotoURL = summaryHeaderPhotoURL['RESOLVEDURL']['ABSOLUTE'];
+        // writeDump(summaryHeaderPhotoURL);
+        images = ListPrepend(images, summaryHeaderPhotoURL);
+      }
+    }
+
+    if (0 < Len(images)) {
+      images = listAppend(images, pickRandomImage());
+    }
+
+    return images;
+  }
+
+  /*
+   * getPostAuthor
+   */
+  public string function getPostAuthor() {
+    return getCSContactEmail();
   }
 
   /*
@@ -323,14 +351,22 @@ component accessors=true output=false persistent=false {
    * getPostSlug
    */
   public string function getPostSlug() {
-    return '';
+    var pageID = getCSPageID();
+    // writeDump(getCSPageID());
+    // writeDump(application.adf.ceData.getElementInfoByPageID(getCSPageID()));
+    // WriteDump(application.adf.csData.getCSPageURL(pageID));
+    // WriteDump(application.adf.csData.getPageStandardMetadata(pageID));
+    var metadata = application.adf.csData.getPageStandardMetadata(pageID);
+    var fileName = metadata.FileName;
+    var slug = replaceNoCase(fileName, '.cfm', '');
+    return slug;
   }
 
   /*
-   * getPostAuthor
+   * getTitle
    */
-  public string function getPostAuthor() {
-    return '';
+  public string function getTitle() {
+    return VARIABLES.csTitle;
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -344,30 +380,49 @@ component accessors=true output=false persistent=false {
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
   /*
-   * This facilitites the use the Underscore.cfc XML export feature.
+   * This facilitites XML export feature
    * Not everything is HTML encdoded because of how WordPress and WPAllImport work
    */
-  public struct function toStructForExport (boolean isEncodedForHTML = true) {
+  public struct function toStructForExport () {
     var s = {};
 
-    s['title']       = getTitle();
-    s['content']     = getContent();
-    s['excerpt']     = getExcerpt();
-    s['images']      = getImages();
-    s['cs_page_id']  = getCsPageID();
-    s['categories']  = getCategories();
-    s['tags']        = getTags();
-    s['post_date']   = getPostDate();
-    s['post_slug']   = getPostSlug();
-    s['post_author'] = getPostAuthor();
-
-    if (isEncodedForHTML) {
-      s['title']   = encodeForHTML(s['title']);
-      s['content'] = encodeForHTML(s['content']);
-      s['excerpt'] = encodeForHTML(s['excerpt']);
-    }
+    s['title']       = encodeForXML(getTitle());
+    s['content']     = encodeForXML(getContent());
+    s['excerpt']     = encodeForXML(getExcerpt());
+    s['images']      = encodeForXML(getImages());
+    s['cs_page_id']  = encodeForXML(getCsPageID());
+    s['categories']  = encodeForXML(getCategories());
+    s['tags']        = encodeForXML(getTags());
+    s['post_date']   = encodeForXML(getPostDate());
+    s['post_slug']   = encodeForXML(getPostSlug());
+    s['post_author'] = encodeForXML(getPostAuthor());
 
     return s;
+  }
+
+  /*
+   *
+   */
+  public string function toXML () {
+    var xml = '';
+    var s = toStructForExport();
+
+    savecontent variable='xml' {
+      writeOutput('<article>');
+      writeOutput('<title>#s['title']#</title>');
+      writeOutput('<content>#s['content']#</content>');
+      writeOutput('<excerpt>#s['excerpt']#</excerpt>');
+      writeOutput('<images>#s['images']#</images>');
+      writeOutput('<cs_page_id>#s['cs_page_id']#</cs_page_id>');
+      writeOutput('<categories>#s['categories']#</categories>');
+      writeOutput('<tags>#s['tags']#</tags>');
+      writeOutput('<post_date>#s['post_date']#</post_date>');
+      writeOutput('<post_slug>#s['post_slug']#</post_slug>');
+      writeOutput('<post_author>#s['post_author']#</post_author>');
+      writeOutput('</article>');
+    }
+
+    return xml;
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -390,7 +445,15 @@ component accessors=true output=false persistent=false {
     return arrayToList(urls);
   }
 
-  private boolean function isURLAbsolute (required string url) {
+  /*
+   * Basically, does it have a protocol
+   * e.g.
+   * - http:
+   * - https:
+   * - mailto:
+   * - tel:
+   */
+  private boolean function isURLFullyQualified (required string url) {
     return 1 == REFindNoCase('^[a-z][a-z0-9+.-]*:', url);
   }
 
@@ -413,19 +476,21 @@ component accessors=true output=false persistent=false {
   }
 
   private string function fullyQualifyURL (required string url) {
-    var absoluteURL = '';
+    var fqURL = '';
 
-    if (isURLAbsolute(url)) {
-      absoluteURL &= url;
+    if (isURLFullyQualified(url)) {
+      fqURL &= url;
     } else if (isURLProtocolRelative(url)) {
-      absoluteURL &= 'http:#url#';
+      fqURL &= 'http:#url#';
     } else if (isURLRootRelative(url)) {
-      absoluteURL &= 'http://';
-      absoluteURL &= domainFromRootRelativeURL(url);
-      absoluteURL &= stripDomainDirectoryFromURL(url);
+      fqURL &= 'http://';
+      fqURL &= domainFromRootRelativeURL(url);
+      fqURL &= stripDomainDirectoryFromURL(url);
+    } else {
+      fqURL = url;
     }
 
-    return absoluteURL;
+    return fqURL;
   }
 
   /*
@@ -467,35 +532,31 @@ component accessors=true output=false persistent=false {
    */
   private string function stripDomainDirectoryFromURL (url) {
     var tmpURL = '';
-    var regex = '';
-    regex &= request.site.CP_URL;
-    regex &= '(?:com|mu|tv)-(?:[^/]+)';
-    // WriteDump(regex);
+    var escapedCPURL = replace(request.site.CP_URL, '/', '\/', 'all');
+    var regex = '#escapedCPURL#(?:com|mu|tv)-(?:[^/]+)';
     var matches = REMatchNoCase(regex, url);
+    // DEBUG: URL-matching Regular Expression
+    // writeOutput('<div>#regex#</div>');
     // WriteDump(var = matches, label = 'stripDomainDirectoryFromURL directory');
     if (IsArray(matches) && 1 == ArrayLen(matches)) {
       tmpURL = Replace(url, matches[1], '');
+    } else {
+      tmpURL = url;
     }
     return tmpURL;
   }
 
-  private string function removeMediaContact (required string corpus) {
-    var regexMediaContact = '';
-
-    regexMediaContact &= '\s*';
-    regexMediaContact &= 'Media';
-    regexMediaContact &= '\s+';
-    regexMediaContact &= 'Contact';
-    regexMediaContact &= '\s*:';
-    regexMediaContact &= '\s*';
-
+  private any function stripMediaContactFromDocument (required any document) {
+    var regexMediaContact = '^\s*Media\s+Contact\s*:\s*$';
     ArrayEach(document.select('*'), function (element) {
-      if (1 == REFind(regexMediaContact, element.text())) {
+      var text = element.text();
+      text = replaceNoCase(text, '&nbsp;', ' ');
+      text = reReplace(text, '\s+', ' ');
+      if (1 == REFind(regexMediaContact, text)) {
         element.remove();
       }
     });
-    // VARIABLES.document.body().html();
-    return corpus;
+    return document;
   }
 
   private boolean function isTruthy(v) {
@@ -617,6 +678,101 @@ component accessors=true output=false persistent=false {
     text = ReReplace(text, "&quot(^;)", "&quot;\1", "All");
 
     return text;
+  }
+
+  private any function fullyQualifyURLsInLinksInDocument(any document) {
+    var links = document.select('a[href]');
+
+    // writeDump(links);
+
+    ArrayEach(links, function (link) {
+      // DEBUG: Before link
+      // writeOutput('<div>#link.attr("href")#</div>');
+      var href = link.attr('href');
+      var fqHref = fullyQualifyURL(href);
+      link.attr('href', fqHref);
+      // Debug: After link
+      // writeOutput('<div>#link.attr("href")#</div>');
+    });
+
+    return document;
+  }
+
+  /*
+   * h1s will be replaced with h2s in another function
+   */
+  private string function cleanContentHTML(string html) {
+    var allowableTags = arrayNew(1);
+    var whitelist = createObject('java', 'org.jsoup.safety.Whitelist');
+    arrayAppend(allowableTags, 'a');
+    arrayAppend(allowableTags, 'b');
+    arrayAppend(allowableTags, 'br');
+    arrayAppend(allowableTags, 'em');
+    arrayAppend(allowableTags, 'h1');
+    arrayAppend(allowableTags, 'h2');
+    arrayAppend(allowableTags, 'h3');
+    arrayAppend(allowableTags, 'h4');
+    arrayAppend(allowableTags, 'h5');
+    arrayAppend(allowableTags, 'h6');
+    arrayAppend(allowableTags, 'i');
+    arrayAppend(allowableTags, 'p');
+    arrayAppend(allowableTags, 'strong');
+    arrayAppend(allowableTags, 'table');
+    arrayAppend(allowableTags, 'tbody');
+    arrayAppend(allowableTags, 'td');
+    arrayAppend(allowableTags, 'thead');
+    arrayAppend(allowableTags, 'th');
+    arrayAppend(allowableTags, 'tr');
+    whitelist.addTags(allowableTags);
+    whitelist.addAttributes('a', ['href']);
+    return jSoup.clean(html, whitelist);
+  }
+
+  private any function removeEmptyPTagsFromDocument(any document) {
+    var pTags = document.select('p');
+    ArrayEach(pTags, function (p) {
+      var text = p.text();
+      text = replace(text, '&nbps;', ' ');
+      var hasWords = 0 < ArrayLen(reMatch('\w', text));
+      if (! hasWords) {
+        p.remove();
+      }
+    });
+    return document;
+  }
+
+  private any function removeExtraneousLinksFromDocument(any document) {
+    var aTags = document.select('a');
+    arrayEach(aTags, function(a) {
+      if (! a.hasAttr('href')) {
+        a.unwrap();
+      }
+    });
+    return document;
+  }
+
+  private string function pickRandomImage() {
+    var randomImages = arrayNew(1);
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/DJI_0003.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/DJI_0036.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/DJI_0049.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/DJI_0060.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/DJI_0310.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/DSC_7697.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/DSC_7716.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/DSC_7722.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/DSC_8550.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/DSC_9141.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/MATT4582.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/MATT4596.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/MATT4751.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/MATT5589.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/MATT7896.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/MATT7907.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/MATT7945.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/MER_7373.jpg');
+    ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/MER_8635.jpg');
+    return randomImages[randRange(1, arrayLen(randomImages))];
   }
 
 }

@@ -1,8 +1,9 @@
 <cfscript>
 
-  // LOCAL.articles = new components.NewsArticles().all();
+  LOCAL.articles = new components.NewsArticles().all();
   // WriteDump(LOCAL.articles.toArray());
-  LOCAL.articles = new components.NewsArticles().findByPageID(338731);
+  // LOCAL.articles = new components.NewsArticles().findByPageID(338731);
+  // LOCAL.articles = new components.NewsArticles().findByPageID(335465);
   LOCAL.articlesArray = LOCAL.articles.toArray();
 
 </cfscript><cfoutput><!doctype html>

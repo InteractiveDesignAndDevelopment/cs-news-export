@@ -7,7 +7,6 @@
 
 component accessors=true output=false persistent=false {
 
-  _ = new Underscore();
   articles = [];
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -20,6 +19,9 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
+  /*
+   *
+   */
   public component function init () {
     if (1 == ArrayLen(ARGUMENTS)) {
       if (IsNumeric(ARGUMENTS[1])) {
@@ -40,14 +42,20 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
+  /*
+   *
+   */
   public component function all () {
     var ceData = application.adf.ceData.getCEData('News Article');
     // DEBUG: Just get the first 10 articles
-    ceData = ArraySlice(ceData, ArrayLen(ceData) - 50, 50);
+    // ceData = ArraySlice(ceData, ArrayLen(ceData) - 50, 50);
     articles = ceDataToArticlesArray(ceData);
     return this;
   }
 
+  /*
+   *
+   */
   public component function findByPageID (required numeric pageID) {
     var ceData = application.adf.ceData.getCEData('News Article');
     ceData = ArrayFilter(ceData, function (ceDatum) {
@@ -57,28 +65,21 @@ component accessors=true output=false persistent=false {
     return this;
   }
 
-  public component function importable () {
-    articles = ArrayMap(articles, function(article) {
-      return article.toStructForXMLExport();
-    });
-    return this;
-  }
-
-  // public array function links () {
-  //   var tempArticles = articles;
-  //   tempArticles = ArrayMap(tempArticles, function(article) {
-  //     return article.links();
+  /*
+   *
+   */
+  // public component function importable () {
+  //   articles = ArrayMap(articles, function(article) {
+  //     return article.toStructForXMLExport();
   //   });
-  //   tempArticles = _.flatten(tempArticles);
-  //   return tempArticles;
+  //   return this;
   // }
 
+  /*
+   *
+   */
   public array function toArray () {
     return articles;
-  }
-
-  public string function toXML () {
-    return _.toXml(importable().toArray());
   }
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -91,6 +92,9 @@ component accessors=true output=false persistent=false {
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 
+  /*
+   *
+   */
   private any function ceDataToArticlesArray (ceData) {
     ceData = ArrayMap(ceData, function(ceDatum) {
       // writeDump(ceDatum);
