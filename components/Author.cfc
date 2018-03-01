@@ -41,4 +41,17 @@ component accessors=true output=false persistent=false {
     return this;
   }
 
+  public struct function toStructForExport () {
+    var s = structNew();
+
+    s['first_name']   = encodeForXML(getFirstName());
+    s['last_name']    = encodeForXML(getLastName());
+    s['role']         = encodeForXML(getRole());
+    s['login']        = encodeForXML(getLogin());
+    s['display_name'] = encodeForXML(getDisplayName());
+
+
+    return s;
+  }
+
 }

@@ -1,6 +1,8 @@
 /**
  * NewsArticle.cfc
  *
+ * This file was created on Elizabeth Hyde's birthday and is dedicated to her.
+ *
  * @author Todd Sayre
  * @date 2017-07-07
  **/
