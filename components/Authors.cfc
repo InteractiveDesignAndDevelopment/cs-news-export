@@ -57,7 +57,7 @@ component accessors=true output=false persistent=false {
       // writeDump(article);
 
       var values      = article.values;
-      var email       = values.contactEmail;
+      var email       = lCase(values.contactEmail);
       var login       = emailToLogin(email);
       var displayName = values.contactName;
       var firstName   = displayNameToFirstName(displayName);
@@ -94,39 +94,6 @@ component accessors=true output=false persistent=false {
 
   /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-   █████   ██████  ██████ ███████ ███████ ███████  ██████  ██████  ███████
-  ██   ██ ██      ██      ██      ██      ██      ██    ██ ██   ██ ██
-  ███████ ██      ██      █████   ███████ ███████ ██    ██ ██████  ███████
-  ██   ██ ██      ██      ██           ██      ██ ██    ██ ██   ██      ██
-  ██   ██  ██████  ██████ ███████ ███████ ███████  ██████  ██   ██ ███████
-
-  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
-
-  // public void function setCEData (required array ceData) {
-  //   VARIABLES.ceData = ARGUMENTS.ceData;
-
-  //   // WriteDump(ceData);
-
-  //   authors = ArrayMap(VARIABLES.ceData, function (s) {
-  //     return new Author(s);
-  //   });
-  // }
-
-  // ceData without media contact information is filtered out
-  // public void function setCEData (required array ceData) {
-  //   var tmpCEData = ceData;
-
-  //   tmpCEData = ArrayFilter(tmpCEData, function(ceDatum) {
-  //     return 0 < Len(ceDatum.values.contactEmail) && 0 < Len(ceDatum.values.contactName);
-  //   });
-
-  //   VARIABLES.ceData = tmpCEData;
-
-  //   // WriteDump(ceData);
-  // }
-
-  /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
   ██████  ██    ██ ██████  ██      ██  ██████
   ██   ██ ██    ██ ██   ██ ██      ██ ██
   ██████  ██    ██ ██████  ██      ██ ██
@@ -134,46 +101,6 @@ component accessors=true output=false persistent=false {
   ██       ██████  ██████  ███████ ██  ██████
 
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
-
-  /*
-   * Return the first author
-   */
-  public component function first (numeric x = 1) {
-    // if (length() < x) {
-    //   x = length();
-    // }
-
-    // var tmpCEData = ArraySlice(getCEData(), 1, x);
-
-    // return new Authors(tmpCEData);
-  }
-
-  /*
-   * Return the author at a specific index
-   */
-  public component function get (required numeric x) {
-    // return new Author(getCEData()[x]);
-  }
-
-  /*
-   * Return the last author
-   */
-  public component function last (numeric x = 1) {
-    // if (length() < x) {
-    //   x = length();
-    // }
-
-    // var tmpCEData = ArraySlice(getCEData(), length() - x, x);
-
-    // return new Authors(tmpCEData);
-  }
-
-  /*
-   * Return how many authors there are
-   */
-  public numeric function length () {
-    // return ArrayLen(getCEData());
-  }
 
   /*
    * Return the authors sorted by the given property
@@ -245,7 +172,7 @@ component accessors=true output=false persistent=false {
    * This is a blunt instrument; wield with caution.
    */
   private function emailToLogin(required string email) {
-    return listFirst(email, '@');
+    return lCase(listFirst(email, '@'));
   }
 
   /*

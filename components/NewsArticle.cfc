@@ -391,13 +391,13 @@ component accessors=true output=false persistent=false {
     s['title']       = encodeForXML(getTitle());
     s['content']     = encodeForXML(getContent());
     s['excerpt']     = encodeForXML(getExcerpt());
-    s['images']      = encodeForXML(getImages());
+    s['images']      = getImages();
     s['cs_page_id']  = encodeForXML(getCsPageID());
     s['categories']  = encodeForXML(getCategories());
     s['tags']        = encodeForXML(getTags());
     s['post_date']   = encodeForXML(getPostDate());
     s['post_slug']   = encodeForXML(getPostSlug());
-    s['post_author'] = encodeForXML(getPostAuthor());
+    s['post_author'] = getPostAuthor();
 
     return s;
   }
