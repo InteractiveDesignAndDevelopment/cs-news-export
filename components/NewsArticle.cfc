@@ -318,7 +318,7 @@ component accessors=true output=false persistent=false {
       }
     }
 
-    if (0 < Len(images)) {
+    if (0 == Len(images)) {
       images = listAppend(images, pickRandomImage());
     }
 
