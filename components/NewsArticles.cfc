@@ -47,7 +47,7 @@ component accessors=true output=false persistent=false {
    */
   public component function all () {
     var ceData = application.adf.ceData.getCEData('News Article');
-    // DEBUG: Just get the first 10 articles
+    // DEBUG: Just get the first 50 articles
     // ceData = ArraySlice(ceData, ArrayLen(ceData) - 50, 50);
     articles = ceDataToArticlesArray(ceData);
     return this;
@@ -64,16 +64,6 @@ component accessors=true output=false persistent=false {
     articles = ceDataToArticlesArray(ceData);
     return this;
   }
-
-  /*
-   *
-   */
-  // public component function importable () {
-  //   articles = ArrayMap(articles, function(article) {
-  //     return article.toStructForXMLExport();
-  //   });
-  //   return this;
-  // }
 
   /*
    *

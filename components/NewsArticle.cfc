@@ -278,6 +278,12 @@ component accessors=true output=false persistent=false {
     document = stripMediaContactFromDocument(document);
     // document.OutputSettings().prettyPrint(true);
     content = document.body().html();
+
+    var images = getImages();
+    if (1 < listLen(images)) {
+      content &= '#chr(10)#[gallery]#chr(10)#';
+    }
+
     return content;
   }
 
@@ -322,6 +328,8 @@ component accessors=true output=false persistent=false {
       images = listAppend(images, pickRandomImage());
     }
 
+    images = normalizeURLListByFileName(images);
+
     return images;
   }
 
@@ -329,7 +337,12 @@ component accessors=true output=false persistent=false {
    * getPostAuthor
    */
   public string function getPostAuthor() {
-    return getCSContactEmail();
+    var postAuthor = getCSContactEmail();
+    postAuthor = emailToLogin(postAuthor);
+    if (0 == Len(Trim(postAuthor))) {
+      postAuthor = 'news';
+    }
+    return postAuthor;
   }
 
   /*
@@ -391,13 +404,13 @@ component accessors=true output=false persistent=false {
     s['title']       = encodeForXML(getTitle());
     s['content']     = encodeForXML(getContent());
     s['excerpt']     = encodeForXML(getExcerpt());
-    s['images']      = getImages();
+    s['images']      = encodeForXML(getImages());
     s['cs_page_id']  = encodeForXML(getCsPageID());
     s['categories']  = encodeForXML(getCategories());
     s['tags']        = encodeForXML(getTags());
     s['post_date']   = encodeForXML(getPostDate());
     s['post_slug']   = encodeForXML(getPostSlug());
-    s['post_author'] = getPostAuthor();
+    s['post_author'] = encodeForXML(getPostAuthor());
 
     return s;
   }
@@ -410,18 +423,18 @@ component accessors=true output=false persistent=false {
     var s = toStructForExport();
 
     savecontent variable='xml' {
-      writeOutput('<article>');
-      writeOutput('<title>#s['title']#</title>');
-      writeOutput('<content>#s['content']#</content>');
-      writeOutput('<excerpt>#s['excerpt']#</excerpt>');
-      writeOutput('<images>#s['images']#</images>');
-      writeOutput('<cs_page_id>#s['cs_page_id']#</cs_page_id>');
-      writeOutput('<categories>#s['categories']#</categories>');
-      writeOutput('<tags>#s['tags']#</tags>');
-      writeOutput('<post_date>#s['post_date']#</post_date>');
-      writeOutput('<post_slug>#s['post_slug']#</post_slug>');
-      writeOutput('<post_author>#s['post_author']#</post_author>');
-      writeOutput('</article>');
+      writeOutput('<article>#chr(10)#');
+      writeOutput('<title>#s['title']#</title>#chr(10)#');
+      writeOutput('<content>#s['content']#</content>#chr(10)#');
+      writeOutput('<excerpt>#s['excerpt']#</excerpt>#chr(10)#');
+      writeOutput('<images>#s['images']#</images>#chr(10)#');
+      writeOutput('<cs_page_id>#s['cs_page_id']#</cs_page_id>#chr(10)#');
+      writeOutput('<categories>#s['categories']#</categories>#chr(10)#');
+      writeOutput('<tags>#s['tags']#</tags>#chr(10)#');
+      writeOutput('<post_date>#s['post_date']#</post_date>#chr(10)#');
+      writeOutput('<post_slug>#s['post_slug']#</post_slug>#chr(10)#');
+      writeOutput('<post_author>#s['post_author']#</post_author>#chr(10)#');
+      writeOutput('</article>#chr(10)#');
     }
 
     return xml;
@@ -775,6 +788,32 @@ component accessors=true output=false persistent=false {
     ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/MER_7373.jpg');
     ArrayAppend(randomImages, 'https://assets.mercer.edu/news-import-stock-images/MER_8635.jpg');
     return randomImages[randRange(1, arrayLen(randomImages))];
+  }
+
+  /*
+   * Return the login derived from the given email address.
+   * This is a blunt instrument; wield with caution.
+   */
+  private function emailToLogin(required string email) {
+    return lCase(listFirst(email, '@'));
+  }
+
+  /*
+   * This is bad code
+   */
+  private function normalizeURLListByFileName(required string urlList) {
+    var normalizedURLList = '';
+    var fileNames = [];
+    listEach(urlList, function (url) {
+      var fileName = getFileFromPath(url);
+      fileName = lCase(fileName);
+      // writeDump(fileName);
+      if (0 == arrayFind(fileNames, fileName)) {
+        arrayAppend(fileNames, fileName);
+        normalizedURLList = listAppend(normalizedURLList, url);
+      }
+    });
+    return normalizedURLList;
   }
 
 }

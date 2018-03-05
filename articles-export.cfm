@@ -6,10 +6,10 @@
     return article.toXML();
   });
   // WriteDump(LOCAL.articles);
-  writeOutput('<?xml version="1.0"?>');
-  writeOutput('<articles>');
+  writeOutput('<?xml version="1.0"?>#chr(10)#');
+  writeOutput('<articles>#chr(10)#');
   arrayEach(LOCAL.articles, function(article) {
     writeOutput(article);
   });
-  writeOutput('</articles>');
+  writeOutput('</articles>#chr(10)#');
 </cfscript>
