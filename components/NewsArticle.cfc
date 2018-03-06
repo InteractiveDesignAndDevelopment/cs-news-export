@@ -1,7 +1,7 @@
 /**
  * NewsArticle.cfc
  *
- * This file was created on Elizabeth Hyde's birthday and is dedicated to her.
+ * This file was created on the birthday of @elcopeland
  *
  * @author Todd Sayre
  * @date 2017-07-07
@@ -276,6 +276,7 @@ component accessors=true output=false persistent=false {
     document = removeExtraneousLinksFromDocument(document);
     document = removeEmptyPTagsFromDocument(document);
     document = stripMediaContactFromDocument(document);
+    document = unwrapPTagsInTDTagsInDocument(document);
     // document.OutputSettings().prettyPrint(true);
     content = document.body().html();
 
@@ -740,6 +741,8 @@ component accessors=true output=false persistent=false {
     arrayAppend(allowableTags, 'tr');
     whitelist.addTags(allowableTags);
     whitelist.addAttributes('a', ['href']);
+    whitelist.addAttributes('td', ['colspan', 'rowspan']);
+    whitelist.addAttributes('th', ['colspan', 'rowspan']);
     return jSoup.clean(html, whitelist);
   }
 
@@ -814,6 +817,19 @@ component accessors=true output=false persistent=false {
       }
     });
     return normalizedURLList;
+  }
+
+  /*
+   *
+   */
+  private function unwrapPTagsInTDTagsInDocument(required any document) {
+    var tmpDocument = document;
+    var tdPs = tmpDocument.select('td p:only-child');
+    // writeDump(tdPs);
+    arrayEach(tdPs, function(el) {
+      el.unwrap();
+    });
+    return tmpDocument;
   }
 
 }
