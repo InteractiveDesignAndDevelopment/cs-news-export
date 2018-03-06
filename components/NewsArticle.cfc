@@ -276,7 +276,7 @@ component accessors=true output=false persistent=false {
     document = removeExtraneousLinksFromDocument(document);
     document = removeEmptyPTagsFromDocument(document);
     document = stripMediaContactFromDocument(document);
-    document = unwrapPTagsInTDTagsInDocument(document);
+    document = unwrapParagraphsInTablesInDocument(document);
     // document.OutputSettings().prettyPrint(true);
     content = document.body().html();
 
@@ -802,7 +802,8 @@ component accessors=true output=false persistent=false {
   }
 
   /*
-   * This is bad code
+   * This isn't strictly necessary, but it mirrors how the WP All Import plugin works
+   * This keeps the export in line with the import
    */
   private function normalizeURLListByFileName(required string urlList) {
     var normalizedURLList = '';
@@ -820,11 +821,11 @@ component accessors=true output=false persistent=false {
   }
 
   /*
-   *
+   * Paragraphs in tables just make the tables longer
    */
-  private function unwrapPTagsInTDTagsInDocument(required any document) {
+  private function unwrapParagraphsInTablesInDocument(required any document) {
     var tmpDocument = document;
-    var tdPs = tmpDocument.select('td p:only-child');
+    var tdPs = tmpDocument.select('table p:only-child');
     // writeDump(tdPs);
     arrayEach(tdPs, function(el) {
       el.unwrap();
