@@ -1,6 +1,6 @@
 # cs-news-export
 
-This project exports the CS News Articles for importing into the new WordPress News site.
+This project exported the CS News Articles for importing into the new WordPress News site.
 
 ## Sample cs-authors-export.xml file.
 
@@ -37,3 +37,4 @@ This project exports the CS News Articles for importing into the new WordPress N
   </article>
 </articles>
 ```
+The new in-WordPress website has launched and there should never be a need to use this again.
